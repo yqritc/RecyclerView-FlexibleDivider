@@ -25,38 +25,37 @@ public class SampleActivity extends ActionBarActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(
-                new HorizontalDividerItemDecoration.Builder(this)
-                        .sizeProvider(new FlexibleDividerDecoration.SizeProvider() {
-                            @Override
-                            public int dividerSize(int position, RecyclerView parent) {
-                                return position%5 * 10;
-                            }
-                        })
-//                        .colorProvider(new FlexibleDividerDecoration.ColorProvider() {
-//                            @Override
-//                            public int dividerColor(int position, RecyclerView parent) {
-//                                return position%2==0 ? Color.BLUE : Color.RED;
-//                            }
-//                        })
-//                        .visibilityProvider(new FlexibleDividerDecoration.VisibilityProvider() {
-//                            @Override
-//                            public boolean shouldHideDivider(int position, RecyclerView parent) {
-//                                return false;
-//                            }
-//                        })
-//                        .marginProvider(new HorizontalDividerItemDecoration.MarginProvider() {
-//                            @Override
-//                            public int dividerLeftMargin(int position, RecyclerView parent) {
-//                                return 0;
-//                            }
-//
-//                            @Override
-//                            public int dividerRightMargin(int position, RecyclerView parent) {
-//                                return 0;
-//                            }
-//                        })
-                        .build());
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
+                .sizeProvider(new FlexibleDividerDecoration.SizeProvider() {
+                    @Override
+                    public int dividerSize(int position, RecyclerView parent) {
+                        return getResources().getDimensionPixelSize(R.dimen.sample_divider_height);
+                    }
+                })
+                .colorProvider(new FlexibleDividerDecoration.ColorProvider() {
+                    @Override
+                    public int dividerColor(int position, RecyclerView parent) {
+                        return Color.RED;
+                    }
+                })
+                .visibilityProvider(new FlexibleDividerDecoration.VisibilityProvider() {
+                    @Override
+                    public boolean shouldHideDivider(int position, RecyclerView parent) {
+                        return false;
+                    }
+                })
+                .marginProvider(new HorizontalDividerItemDecoration.MarginProvider() {
+                    @Override
+                    public int dividerLeftMargin(int position, RecyclerView parent) {
+                        return 0;
+                    }
+
+                    @Override
+                    public int dividerRightMargin(int position, RecyclerView parent) {
+                        return 0;
+                    }
+                })
+                .build());
     }
 
 
