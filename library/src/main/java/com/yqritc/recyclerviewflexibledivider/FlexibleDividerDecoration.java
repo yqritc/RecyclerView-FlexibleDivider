@@ -58,7 +58,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         int childCount = parent.getChildCount();
-        for (int i = 1; i < childCount; i++) {
+        for (int i = 0; i < childCount - 1; i++) {
             View child = parent.getChildAt(i);
             int childPosition = parent.getChildPosition(child);
             if (mVisibilityProvider.shouldHideDivider(childPosition, parent)) {
@@ -96,24 +96,37 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     public interface VisibilityProvider {
 
         /**
-         * Returns true if divider drawn over the top line of the cell at position should be
-         * hidden.
-         * The range of position value is "1" to "item size - 1".
+         * Returns true if divider should be hidden.
          *
-         * @param position Target position of the cell.
+         * @param position Divider position
          * @param parent   RecyclerView
-         * @return true if the divider at position should be hidden
+         * @return True if the divider at position should be hidden
          */
         public boolean shouldHideDivider(int position, RecyclerView parent);
     }
 
     public interface ColorProvider {
 
+        /**
+         * Returns {@link android.graphics.Color} value of divider
+         *
+         * @param position Divider position
+         * @param parent   RecyclerView
+         * @return Color value
+         */
         public int dividerColor(int position, RecyclerView parent);
     }
 
     public interface SizeProvider {
 
+        /**
+         * Returns size value of divider.
+         * Height for horizontal divider, width for vertical divider
+         *
+         * @param position Divider position
+         * @param parent   RecyclerView
+         * @return Size of divider
+         */
         public int dividerSize(int position, RecyclerView parent);
     }
 

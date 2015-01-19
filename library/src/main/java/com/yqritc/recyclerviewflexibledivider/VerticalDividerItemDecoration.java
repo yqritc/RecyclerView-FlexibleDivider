@@ -36,11 +36,11 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
         bounds.bottom = parent.getHeight() - parent.getPaddingBottom() -
                 mMarginProvider.dividerBottomMargin(position, parent);
         if (mIsPaintMode) {
-            bounds.left = child.getLeft() - params.leftMargin;
+            bounds.left = child.getRight() + params.leftMargin;
             bounds.right = bounds.left;
         } else {
             int dividerSize = mSizeProvider.dividerSize(position, parent);
-            bounds.left = child.getLeft() - params.leftMargin - dividerSize / 2;
+            bounds.left = child.getRight() + params.leftMargin - dividerSize / 2;
             bounds.right = bounds.left + dividerSize;
         }
         return bounds;
@@ -48,8 +48,22 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
 
     public interface MarginProvider {
 
+        /**
+         * Returns top margin of divider.
+         *
+         * @param position Divider position
+         * @param parent   RecyclerView
+         * @return top margin
+         */
         public int dividerTopMargin(int position, RecyclerView parent);
 
+        /**
+         * Returns bottom margin of divider.
+         *
+         * @param position Divider position
+         * @param parent   RecyclerView
+         * @return bottom margin
+         */
         public int dividerBottomMargin(int position, RecyclerView parent);
     }
 

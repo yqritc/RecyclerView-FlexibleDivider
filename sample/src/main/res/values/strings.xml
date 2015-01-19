@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">sample</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-
+    <string name="app_name">FlexibleDivider Sample</string>
+    <string name="menu_simple">Simple Divider List</string>
+    <string name="menu_complex">Complex Divider List</string>
 </resources>

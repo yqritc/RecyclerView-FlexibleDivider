@@ -10,11 +10,11 @@ import android.widget.TextView;
 /**
  * Created by yqritc on 2015/01/08.
  */
-public class SampleAdapter extends RecyclerView.Adapter<SampleAdapter.ViewHolder> {
+public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder> {
 
     private LayoutInflater mLayoutInflater;
 
-    public SampleAdapter(Context context) {
+    public SimpleAdapter(Context context) {
         super();
         mLayoutInflater = LayoutInflater.from(context);
     }
