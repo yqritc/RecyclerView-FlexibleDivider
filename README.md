@@ -14,13 +14,16 @@ dependencies {
 ```
 
 # Usage
+
+The following is the simplest usage.
+Drawing a divider drawable retrived from android.R.attr.listDivider between each cell.
 ```
 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this))
 ```
-The above line of code draw a divider drawable retrived from android.R.attr.listDivider between each cell.  
-If you want to custom dividers, you can set color, size, margin values.
 
+If you want to set color, size and margin values 
+You can specify as the followings.
 ```
 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 recyclerView.addItemDecoration(
