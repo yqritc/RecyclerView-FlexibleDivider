@@ -19,7 +19,20 @@ RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this))
 ```
 The above line of code draw a divider drawable retrived from android.R.attr.listDivider between each cell.  
-If you want to custom dividers, implement the following interfaces.
+If you want to custom dividers, you can set color, size, margin values.
+
+```
+RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+recyclerView.addItemDecoration(
+        new HorizontalDividerItemDecoration.Builder(this)
+                .color(Color.RED)
+                .size(getResources().getDimensionPixelSize(R.dimen.divider))
+                .margin(getResources().getDimensionPixelSize(R.dimen.leftmargin),
+                        getResources().getDimensionPixelSize(R.dimen.rightmargin))
+                .build());
+```
+
+If you want to cusomize divider depending on the position, implement the following interfaces.
 
 ### List of provider
 The following providers can be implemented and controllable for each divider drawn between cells.
