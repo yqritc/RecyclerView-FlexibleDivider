@@ -86,6 +86,20 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
             super(context);
         }
 
+        public Builder margin(final int leftMargin, final int rightMargin) {
+            return marginProvider(new MarginProvider() {
+                @Override
+                public int dividerLeftMargin(int position, RecyclerView parent) {
+                    return leftMargin;
+                }
+
+                @Override
+                public int dividerRightMargin(int position, RecyclerView parent) {
+                    return rightMargin;
+                }
+            });
+        }
+
         public Builder marginProvider(MarginProvider provider) {
             mMarginProvider = provider;
             return this;

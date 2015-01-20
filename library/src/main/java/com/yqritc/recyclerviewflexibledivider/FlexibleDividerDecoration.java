@@ -146,9 +146,27 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             mContext = context;
         }
 
+        public T color(final int color) {
+            return colorProvider(new ColorProvider() {
+                @Override
+                public int dividerColor(int position, RecyclerView parent) {
+                    return color;
+                }
+            });
+        }
+
         public T colorProvider(ColorProvider provider) {
             mColorProvider = provider;
             return (T) this;
+        }
+
+        public T size(final int size) {
+            return sizeProvider(new SizeProvider() {
+                @Override
+                public int dividerSize(int position, RecyclerView parent) {
+                    return size;
+                }
+            });
         }
 
         public T sizeProvider(SizeProvider provider) {

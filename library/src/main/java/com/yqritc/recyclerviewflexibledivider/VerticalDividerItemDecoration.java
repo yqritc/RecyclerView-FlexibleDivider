@@ -85,6 +85,20 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
             super(context);
         }
 
+        public Builder margin(final int topMargin, final int bottomMargin) {
+            return marginProvider(new MarginProvider() {
+                @Override
+                public int dividerTopMargin(int position, RecyclerView parent) {
+                    return topMargin;
+                }
+
+                @Override
+                public int dividerBottomMargin(int position, RecyclerView parent) {
+                    return bottomMargin;
+                }
+            });
+        }
+
         public Builder marginProvider(MarginProvider provider) {
             mMarginProvider = provider;
             return this;
