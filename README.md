@@ -1,4 +1,6 @@
 # RecyclerView-FlexibleDivider
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RecyclerView--FlexibleDivider-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1418)  
+
 Android library providing simple way to control divider items of RecyclerView
 
  ![Simple Divider](/sample/sample1.gif) ![Complex Divider](/sample/sample2.gif)
