@@ -1,7 +1,7 @@
 # RecyclerView-FlexibleDivider
 Android library providing simple way to control divider items of RecyclerView
 
- ![Simple Divider](/sample/sample1.png) ![Complex Divider](/sample/sample2.png) 
+ ![Simple Divider](/sample/sample1.gif) ![Complex Divider](/sample/sample2.gif)
 
 # Gradle
 ```
