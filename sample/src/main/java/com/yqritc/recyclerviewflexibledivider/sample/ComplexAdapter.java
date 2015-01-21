@@ -69,13 +69,13 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
             case 1:
                 return 10;
             default:
-                return 2;
+                return 2+position;
         }
     }
 
     @Override
     public boolean shouldHideDivider(int position, RecyclerView parent) {
-        if (position == 12 || position == 13) {
+        if (position == 14 || position == 15) {
             return true;
         }
         return false;
@@ -83,12 +83,20 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
 
     @Override
     public int dividerLeftMargin(int position, RecyclerView parent) {
-        return position * 10;
+        if(position<10) {
+            return position * 20;
+        }else{
+            return (20-position) * 20;
+        }
     }
 
     @Override
     public int dividerRightMargin(int position, RecyclerView parent) {
-        return position * 10;
+        if(position<10) {
+            return position * 20;
+        }else{
+            return (20-position) * 20;
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
