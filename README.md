@@ -25,8 +25,7 @@ RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this))
 ```
 
-If you want to set color, size and margin values 
-You can specify as the followings.
+If you want to set color, size and margin values, you can specify as the followings.
 ```
 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 recyclerView.addItemDecoration(
