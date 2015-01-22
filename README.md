@@ -19,7 +19,7 @@ dependencies {
 # Usage
 
 The following is the simplest usage.
-Drawing a divider drawable retrived from android.R.attr.listDivider between each cell.
+Drawing a divider drawable retrieved from android.R.attr.listDivider between each cell.
 ```
 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this))
@@ -38,7 +38,19 @@ recyclerView.addItemDecoration(
                 .build());
 ```
 
-If you want to cusomize divider depending on the position, implement the following interfaces.
+
+Instead of setting color and size, you can set paint object.
+```
+Paint paint = new Paint();
+paint.setStrokeWidth(5);
+paint.setColor(Color.BLUE);
+paint.setAntiAlias(true);
+paint.setPathEffect(new DashPathEffect(new float[]{25.0f, 25.0f}, 0));
+recyclerView.addItemDecoration(
+        new HorizontalDividerItemDecoration.Builder(this).paint(paint).build());
+```
+
+If you want to customize divider depending on the position, implement the following interfaces.
 
 ### List of provider
 The following providers can be implemented and controllable for each divider drawn between cells.
@@ -49,8 +61,11 @@ If non of color is specified, default divider retrieved from android.R.attr.list
 - SizeProvider  
 Provide height for horizontal divider, width for vertical divider.
 
+- PaintProvider
+Provide paint object for divider line to draw.
+
 - VisibilityProvider  
-Enables you to control the visibiity of dividers.
+Enables you to control the visibility of dividers.
 
 - MarginProvider for horizontal divider (vertical list)  
 Enables you to specify left and right margin of divider.
@@ -58,6 +73,8 @@ Enables you to specify left and right margin of divider.
 - MarginProvider for vertical divider (horizontal list)  
 Enables you to specify top and bottom margin of divider.
 
+### Caution
+- When you set Paint, you must use setColor and setStrokeWidth methods of paint class.
 
 # License
 ```
