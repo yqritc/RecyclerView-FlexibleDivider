@@ -5,6 +5,8 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +17,9 @@ import android.widget.TextView;
  * Created by yqritc on 2015/01/08.
  */
 public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHolder> implements
-        FlexibleDividerDecoration.SizeProvider,
-        FlexibleDividerDecoration.ColorProvider,
+        FlexibleDividerDecoration.PaintProvider,
+//        FlexibleDividerDecoration.SizeProvider,
+//        FlexibleDividerDecoration.ColorProvider,
         FlexibleDividerDecoration.VisibilityProvider,
         HorizontalDividerItemDecoration.MarginProvider {
 
@@ -46,32 +49,60 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
     }
 
     @Override
-    public int dividerColor(int position, RecyclerView parent) {
+    public Paint dividerPaint(int position, RecyclerView parent) {
+        Paint paint = new Paint();
         switch (position % 10) {
             case 0:
-                return Color.RED;
+                paint.setColor(Color.RED);
+                paint.setStrokeWidth(30);
+                break;
             case 1:
-                return Color.MAGENTA;
+                paint.setColor(Color.MAGENTA);
+                paint.setStrokeWidth(10);
+                break;
             default:
                 if (position % 2 == 0) {
-                    return Color.BLUE;
+                    paint.setColor(Color.BLUE);
+                    paint.setAntiAlias(true);
+                    paint.setPathEffect(new DashPathEffect(new float[]{25.0f, 25.0f}, 0));
                 } else {
-                    return Color.GREEN;
+                    paint.setColor(Color.GREEN);
+
                 }
+                paint.setStrokeWidth(2+position);
+                break;
         }
+
+        return paint;
     }
 
-    @Override
-    public int dividerSize(int position, RecyclerView parent) {
-        switch (position % 10) {
-            case 0:
-                return 30;
-            case 1:
-                return 10;
-            default:
-                return 2+position;
-        }
-    }
+//    @Override
+//    public int dividerColor(int position, RecyclerView parent) {
+//        switch (position % 10) {
+//            case 0:
+//                return Color.RED;
+//            case 1:
+//                return Color.MAGENTA;
+//            default:
+//                if (position % 2 == 0) {
+//                    return Color.BLUE;
+//                } else {
+//                    return Color.GREEN;
+//                }
+//        }
+//    }
+//
+//    @Override
+//    public int dividerSize(int position, RecyclerView parent) {
+//        switch (position % 10) {
+//            case 0:
+//                return 30;
+//            case 1:
+//                return 10;
+//            default:
+//                return 2+position;
+//        }
+//    }
 
     @Override
     public boolean shouldHideDivider(int position, RecyclerView parent) {

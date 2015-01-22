@@ -18,6 +18,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".PaintActivity"
+            android:label="@string/menu_paint"/>
+        <activity
             android:name=".ComplexActivity"
             android:label="@string/menu_complex"/>
     </application>
