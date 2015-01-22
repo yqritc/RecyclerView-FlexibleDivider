@@ -35,14 +35,16 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
                 mMarginProvider.dividerTopMargin(position, parent);
         bounds.bottom = parent.getHeight() - parent.getPaddingBottom() -
                 mMarginProvider.dividerBottomMargin(position, parent);
-        if (mIsPaintMode) {
-            bounds.left = child.getRight() + params.leftMargin;
-            bounds.right = bounds.left;
-        } else {
+
+        if (mDividerType == DividerType.DRAWABLE) {
             int dividerSize = mSizeProvider.dividerSize(position, parent);
             bounds.left = child.getRight() + params.leftMargin - dividerSize / 2;
             bounds.right = bounds.left + dividerSize;
+        } else {
+            bounds.left = child.getRight() + params.leftMargin;
+            bounds.right = bounds.left;
         }
+
         return bounds;
     }
 
@@ -105,6 +107,7 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
         }
 
         public VerticalDividerItemDecoration build() {
+            checkBuilderParams();
             return new VerticalDividerItemDecoration(this);
         }
     }

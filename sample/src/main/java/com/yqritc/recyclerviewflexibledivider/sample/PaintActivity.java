@@ -4,6 +4,9 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,10 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 
-public class ComplexActivity extends ActionBarActivity {
+public class PaintActivity extends ActionBarActivity {
 
     public static void startActivity(Activity activity) {
-        Intent intent = new Intent(activity, ComplexActivity.class);
+        Intent intent = new Intent(activity, PaintActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
     }
@@ -34,16 +37,19 @@ public class ComplexActivity extends ActionBarActivity {
             recyclerView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
-        ComplexAdapter adapter = new ComplexAdapter(this);
+        SimpleAdapter adapter = new SimpleAdapter(this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(OrientationHelper.VERTICAL);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
-                .paintProvider(adapter)
-                .visibilityProvider(adapter)
-                .marginProvider(adapter)
-                .build());
+
+        Paint paint = new Paint();
+        paint.setStrokeWidth(5);
+        paint.setColor(Color.BLUE);
+        paint.setAntiAlias(true);
+        paint.setPathEffect(new DashPathEffect(new float[]{25.0f, 25.0f}, 0));
+        recyclerView.addItemDecoration(
+                new HorizontalDividerItemDecoration.Builder(this).paint(paint).build());
     }
 
 
