@@ -5,6 +5,10 @@ Android library providing simple way to control divider items of RecyclerView
 
  ![Simple Divider](/sample/sample1.gif) ![Complex Divider](/sample/sample2.gif)
 
+# Release Note
+
+[Release Note] (https://github.com/yqritc/RecyclerView-FlexibleDivider/releases)
+
 # Gradle
 ```
 repositories {
@@ -12,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.yqritc:recyclerview-flexibledivider:1.0.1'
+    compile 'com.yqritc:recyclerview-flexibledivider:1.1.0'
 }
 ```
 
@@ -49,19 +53,31 @@ recyclerView.addItemDecoration(
         new HorizontalDividerItemDecoration.Builder(this).paint(paint).build());
 ```
 
+Also 9patch drawable can be used for drawing divider.
+```
+RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
+        .drawable(R.drawable.sample)
+        .size(15)
+        .build());
+```
+
 If you want to customize divider depending on the position, implement the following interfaces.
 
 ### List of provider
 The following providers can be implemented and controllable for each divider drawn between cells.
 
-- ColorProvider  
-If non of color is specified, default divider retrieved from android.R.attr.listDivider will be used.
-
-- SizeProvider  
-Provide height for horizontal divider, width for vertical divider.
+- ColorProvider
+Provide color for divider
 
 - PaintProvider
 Provide paint object for divider line to draw.
+
+- DrawableDivider
+Provide drawable object for divider line
+
+- SizeProvider
+Provide height for horizontal divider, width for vertical divider.
 
 - VisibilityProvider  
 Enables you to control the visibility of dividers.
@@ -72,8 +88,10 @@ Enables you to specify left and right margin of divider.
 - MarginProvider for vertical divider (horizontal list)  
 Enables you to specify top and bottom margin of divider.
 
-### Caution
+### Note
+- When neither of color, paint, drawable is set, default divider retrieved from android.R.attr.listDivider will be used.
 - When you set Paint, you must use setColor and setStrokeWidth methods of paint class.
+
 
 # License
 ```
