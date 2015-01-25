@@ -2,6 +2,7 @@ package com.yqritc.recyclerviewflexibledivider;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -18,16 +19,6 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
     }
 
     @Override
-    protected void getDividerOffset(Rect outRect) {
-        outRect.left = getDividerSize();
-    }
-
-    @Override
-    protected int getDividerSize() {
-        return mDivider.getIntrinsicWidth();
-    }
-
-    @Override
     protected Rect getDividerBound(int position, RecyclerView parent, View child) {
         Rect bounds = new Rect(0, 0, 0, 0);
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
@@ -36,18 +27,48 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
         bounds.bottom = parent.getHeight() - parent.getPaddingBottom() -
                 mMarginProvider.dividerBottomMargin(position, parent);
 
+        int dividerSize = getDividerSize(position, parent);
         if (mDividerType == DividerType.DRAWABLE) {
-            int dividerSize = mSizeProvider.dividerSize(position, parent);
-            bounds.left = child.getRight() + params.leftMargin - dividerSize / 2;
+            bounds.left = child.getRight() + params.leftMargin;
             bounds.right = bounds.left + dividerSize;
         } else {
-            bounds.left = child.getRight() + params.leftMargin;
+            bounds.left = child.getRight() + params.leftMargin + dividerSize / 2;
             bounds.right = bounds.left;
         }
 
         return bounds;
     }
 
+    @Override
+    protected void setItemOffsets(Rect outRect, int position, RecyclerView parent) {
+        int size = getDividerSize(position, parent) / 2;
+        if (position == 0) {
+            outRect.set(0, 0, size, 0);
+        } else {
+            int lastItemSize = getDividerSize(position - 1, parent) / 2;
+            if (position == parent.getLayoutManager().getItemCount() - 1) {
+                outRect.set(lastItemSize, 0, 0, 0);
+            } else {
+                outRect.set(lastItemSize, 0, size, 0);
+            }
+        }
+    }
+
+    private int getDividerSize(int position, RecyclerView parent) {
+        if (mPaintProvider != null) {
+            return (int) mPaintProvider.dividerPaint(position, parent).getStrokeWidth();
+        } else if (mSizeProvider != null) {
+            return mSizeProvider.dividerSize(position, parent);
+        } else if (mDrawableProvider != null) {
+            Drawable drawable = mDrawableProvider.drawableProvider(position, parent);
+            return drawable.getIntrinsicWidth();
+        }
+        throw new RuntimeException("failed to get size");
+    }
+
+    /**
+     * Interface for controlling divider margin
+     */
     public interface MarginProvider {
 
         /**

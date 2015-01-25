@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -24,10 +25,10 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     }
 
     protected DividerType mDividerType = DividerType.DRAWABLE;
-    protected Drawable mDivider;
     protected VisibilityProvider mVisibilityProvider;
     protected PaintProvider mPaintProvider;
     protected ColorProvider mColorProvider;
+    protected DrawableProvider mDrawableProvider;
     protected SizeProvider mSizeProvider;
     private Paint mPaint;
 
@@ -42,10 +43,20 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             setSizeProvider(builder);
         } else {
             mDividerType = DividerType.DRAWABLE;
-            TypedArray a = builder.mContext.obtainStyledAttributes(ATTRS);
-            mDivider = a.getDrawable(0);
-            a.recycle();
-            setSizeProvider(builder);
+            if (builder.mDrawableProvider == null) {
+                TypedArray a = builder.mContext.obtainStyledAttributes(ATTRS);
+                final Drawable divider = a.getDrawable(0);
+                a.recycle();
+                mDrawableProvider = new DrawableProvider() {
+                    @Override
+                    public Drawable drawableProvider(int position, RecyclerView parent) {
+                        return divider;
+                    }
+                };
+            } else {
+                mDrawableProvider = builder.mDrawableProvider;
+            }
+            mSizeProvider = builder.mSizeProvider;
         }
 
         mVisibilityProvider = builder.mVisibilityProvider;
@@ -57,14 +68,9 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             mSizeProvider = new SizeProvider() {
                 @Override
                 public int dividerSize(int position, RecyclerView parent) {
-                    if (mDividerType == DividerType.COLOR) {
-                        return DEFAULT_SIZE;
-                    } else {
-                        return getDividerSize();
-                    }
+                    return DEFAULT_SIZE;
                 }
             };
-
         }
     }
 
@@ -81,8 +87,9 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             Rect bounds = getDividerBound(childPosition, parent, child);
             switch (mDividerType) {
                 case DRAWABLE:
-                    mDivider.setBounds(bounds);
-                    mDivider.draw(c);
+                    Drawable drawable = mDrawableProvider.drawableProvider(childPosition, parent);
+                    drawable.setBounds(bounds);
+                    drawable.draw(c);
                     break;
                 case PAINT:
                     mPaint = mPaintProvider.dividerPaint(childPosition, parent);
@@ -98,21 +105,18 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-            RecyclerView.State state) {
-        super.getItemOffsets(outRect, view, parent, state);
-        if (mDividerType != DividerType.DRAWABLE) {
-            return;
-        }
-        getDividerOffset(outRect);
+    public void getItemOffsets(Rect rect, View v, RecyclerView parent, RecyclerView.State state) {
+        int position = parent.getChildPosition(v);
+        setItemOffsets(rect, position, parent);
     }
-
-    abstract void getDividerOffset(Rect outRect);
-
-    abstract int getDividerSize();
 
     abstract Rect getDividerBound(int position, RecyclerView parent, View child);
 
+    abstract void setItemOffsets(Rect outRect, int position, RecyclerView parent);
+
+    /**
+     * Interface for controlling divider visibility
+     */
     public interface VisibilityProvider {
 
         /**
@@ -125,11 +129,24 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         public boolean shouldHideDivider(int position, RecyclerView parent);
     }
 
+    /**
+     * Interface for controlling paint instance for divider drawing
+     */
     public interface PaintProvider {
 
+        /**
+         * Returns {@link android.graphics.Paint} for divider
+         *
+         * @param position Divider position
+         * @param parent   RecyclerView
+         * @return Paint instance
+         */
         public Paint dividerPaint(int position, RecyclerView parent);
     }
 
+    /**
+     * Interface for controlling divider color
+     */
     public interface ColorProvider {
 
         /**
@@ -142,6 +159,24 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         public int dividerColor(int position, RecyclerView parent);
     }
 
+    /**
+     * Interface for controlling drawable object for divider drawing
+     */
+    public interface DrawableProvider {
+
+        /**
+         * Returns drawable instance for divider
+         *
+         * @param position Divider position
+         * @param parent   RecyclerView
+         * @return Drawable instance
+         */
+        public Drawable drawableProvider(int position, RecyclerView parent);
+    }
+
+    /**
+     * Interface for controlling divider size
+     */
     public interface SizeProvider {
 
         /**
@@ -160,6 +195,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         private Context mContext;
         private PaintProvider mPaintProvider;
         private ColorProvider mColorProvider;
+        private DrawableProvider mDrawableProvider;
         private SizeProvider mSizeProvider;
         private VisibilityProvider mVisibilityProvider = new VisibilityProvider() {
             @Override
@@ -197,6 +233,24 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
         public T colorProvider(ColorProvider provider) {
             mColorProvider = provider;
+            return (T) this;
+        }
+
+        public T drawable(@DrawableRes int id) {
+            return drawable(mContext.getResources().getDrawable(id));
+        }
+
+        public T drawable(final Drawable drawable) {
+            return drawableProvider(new DrawableProvider() {
+                @Override
+                public Drawable drawableProvider(int position, RecyclerView parent) {
+                    return drawable;
+                }
+            });
+        }
+
+        public T drawableProvider(DrawableProvider provider) {
+            mDrawableProvider = provider;
             return (T) this;
         }
 

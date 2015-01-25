@@ -11,13 +11,12 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 
-public class ComplexActivity extends ActionBarActivity {
+public class DrawableActivity extends ActionBarActivity {
 
     public static void startActivity(Activity activity) {
-        Intent intent = new Intent(activity, ComplexActivity.class);
+        Intent intent = new Intent(activity, DrawableActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
     }
@@ -27,22 +26,15 @@ public class ComplexActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
-        // Workaround for dash path effect
-        // https://code.google.com/p/android/issues/detail?id=29944
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            recyclerView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        }
-
-        ComplexAdapter adapter = new ComplexAdapter(this);
+        SimpleAdapter adapter = new SimpleAdapter(this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(OrientationHelper.VERTICAL);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
-                .paintProvider(adapter)
-                .visibilityProvider(adapter)
-                .marginProvider(adapter)
+                .drawable(R.drawable.sample)
+                .size(15)
                 .build());
     }
 

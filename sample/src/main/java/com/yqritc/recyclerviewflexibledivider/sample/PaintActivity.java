@@ -68,6 +68,9 @@ public class PaintActivity extends ActionBarActivity {
             case R.id.action_paint:
                 PaintActivity.startActivity(this);
                 return true;
+            case R.id.action_drawable:
+                DrawableActivity.startActivity(this);
+                return true;
             case R.id.action_complex:
                 ComplexActivity.startActivity(this);
                 return true;
