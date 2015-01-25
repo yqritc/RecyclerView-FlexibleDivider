@@ -5,6 +5,10 @@ Android library providing simple way to control divider items of RecyclerView
 
  ![Simple Divider](/sample/sample1.gif) ![Complex Divider](/sample/sample2.gif)
 
+# Release Note
+
+[Release Note] (https://github.com/yqritc/RecyclerView-FlexibleDivider/releases)
+
 # Gradle
 ```
 repositories {
@@ -49,7 +53,7 @@ recyclerView.addItemDecoration(
         new HorizontalDividerItemDecoration.Builder(this).paint(paint).build());
 ```
 
-Also drawable can be used as divider.
+Also 9patch drawable can be used for drawing divider.
 ```
 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
