@@ -91,6 +91,8 @@ Enables you to specify top and bottom margin of divider.
 ### Note
 - When neither of color, paint, drawable is set, default divider retrieved from android.R.attr.listDivider will be used.
 - When you set Paint, you must use setColor and setStrokeWidth methods of paint class.
+- If you want to use DashPathEffect, please note the following issue.
+https://code.google.com/p/android/issues/detail?id=29944
 
 
 # License
