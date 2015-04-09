@@ -48,8 +48,10 @@ public class PaintActivity extends ActionBarActivity {
         paint.setColor(Color.BLUE);
         paint.setAntiAlias(true);
         paint.setPathEffect(new DashPathEffect(new float[]{25.0f, 25.0f}, 0));
-        recyclerView.addItemDecoration(
-                new HorizontalDividerItemDecoration.Builder(this).paint(paint).build());
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
+                .paint(paint)
+                .showLastDivider()
+                .build());
     }
 
 

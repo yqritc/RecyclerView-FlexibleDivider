@@ -30,6 +30,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     protected ColorProvider mColorProvider;
     protected DrawableProvider mDrawableProvider;
     protected SizeProvider mSizeProvider;
+    protected boolean mShowLastDivider;
     private Paint mPaint;
 
     protected FlexibleDividerDecoration(Builder builder) {
@@ -60,6 +61,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         }
 
         mVisibilityProvider = builder.mVisibilityProvider;
+        mShowLastDivider = builder.mShowLastDivider;
     }
 
     private void setSizeProvider(Builder builder) {
@@ -76,8 +78,8 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount - 1; i++) {
+        int childCount = mShowLastDivider ? parent.getChildCount() : parent.getChildCount() - 1;
+        for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
             int childPosition = parent.getChildPosition(child);
             if (mVisibilityProvider.shouldHideDivider(childPosition, parent)) {
@@ -203,6 +205,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
                 return false;
             }
         };
+        private boolean mShowLastDivider = false;
 
         public Builder(Context context) {
             mContext = context;
@@ -270,6 +273,11 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
         public T visibilityProvider(VisibilityProvider provider) {
             mVisibilityProvider = provider;
+            return (T) this;
+        }
+
+        public T showLastDivider() {
+            mShowLastDivider = true;
             return (T) this;
         }
 
