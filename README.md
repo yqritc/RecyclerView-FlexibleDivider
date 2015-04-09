@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.yqritc:recyclerview-flexibledivider:1.1.0'
+    compile 'com.yqritc:recyclerview-flexibledivider:1.2.0'
 }
 ```
 
@@ -87,6 +87,17 @@ Enables you to specify left and right margin of divider.
 
 - MarginProvider for vertical divider (horizontal list)  
 Enables you to specify top and bottom margin of divider.
+
+Please refer to ComplexAdapter class in the [sample](/sample/src/main/java/com/yqritc/recyclerviewflexibledivider/sample) for usage in detail.
+
+### Optional
+
+The following method can be used if you want to draw divider line at the end of last item in RecyclerView.
+If you enable this feature, the range of "position" parameter of providers listed above is 0 to itemCount-1.
+Otherwise, the range is 0 to itemCount-2.
+```
+FlexibleDividerDecoration.Builder.showLastDivider
+```
 
 ### Note
 - When neither of color, paint, drawable is set, default divider retrieved from android.R.attr.listDivider will be used.

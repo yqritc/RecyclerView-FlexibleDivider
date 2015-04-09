@@ -41,15 +41,15 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
 
     @Override
     protected void setItemOffsets(Rect outRect, int position, RecyclerView parent) {
-        int size = getDividerSize(position, parent) / 2;
+        int size = getDividerSize(position, parent);
         if (position == 0) {
-            outRect.set(0, 0, size, 0);
+            outRect.set(0, 0, size / 2, 0);
         } else {
-            int lastItemSize = getDividerSize(position - 1, parent) / 2;
+            int lastItemSize = getDividerSize(position - 1, parent);
             if (position == parent.getLayoutManager().getItemCount() - 1) {
-                outRect.set(lastItemSize, 0, 0, 0);
+                outRect.set(lastItemSize / 2, 0, size, 0);
             } else {
-                outRect.set(lastItemSize, 0, size, 0);
+                outRect.set(lastItemSize / 2, 0, size / 2, 0);
             }
         }
     }

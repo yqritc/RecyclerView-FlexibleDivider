@@ -41,15 +41,15 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
 
     @Override
     protected void setItemOffsets(Rect outRect, int position, RecyclerView parent) {
-        int size = getDividerSize(position, parent) / 2;
+        int size = getDividerSize(position, parent);
         if (position == 0) {
-            outRect.set(0, 0, 0, size);
+            outRect.set(0, 0, 0, size / 2);
         } else {
-            int lastItemSize = getDividerSize(position - 1, parent) / 2;
+            int lastItemSize = getDividerSize(position - 1, parent);
             if (position == parent.getLayoutManager().getItemCount() - 1) {
-                outRect.set(0, lastItemSize, 0, 0);
+                outRect.set(0, lastItemSize / 2, 0, size);
             } else {
-                outRect.set(0, lastItemSize, 0, size);
+                outRect.set(0, lastItemSize / 2, 0, size / 2);
             }
         }
     }
