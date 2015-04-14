@@ -1,11 +1,14 @@
 package com.yqritc.recyclerviewflexibledivider;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -195,6 +198,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     public static class Builder<T extends Builder> {
 
         private Context mContext;
+        protected Resources mResources;
         private PaintProvider mPaintProvider;
         private ColorProvider mColorProvider;
         private DrawableProvider mDrawableProvider;
@@ -209,6 +213,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
         public Builder(Context context) {
             mContext = context;
+            mResources = context.getResources();
         }
 
         public T paint(final Paint paint) {
@@ -234,13 +239,17 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             });
         }
 
+        public T colorResId(@ColorRes int colorId) {
+            return color(mResources.getColor(colorId));
+        }
+
         public T colorProvider(ColorProvider provider) {
             mColorProvider = provider;
             return (T) this;
         }
 
         public T drawable(@DrawableRes int id) {
-            return drawable(mContext.getResources().getDrawable(id));
+            return drawable(mResources.getDrawable(id));
         }
 
         public T drawable(final Drawable drawable) {
@@ -264,6 +273,10 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
                     return size;
                 }
             });
+        }
+
+        public T sizeResId(@DimenRes int sizeId) {
+            return size(mResources.getDimensionPixelSize(sizeId));
         }
 
         public T sizeProvider(SizeProvider provider) {

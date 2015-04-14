@@ -35,9 +35,8 @@ RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 recyclerView.addItemDecoration(
         new HorizontalDividerItemDecoration.Builder(this)
                 .color(Color.RED)
-                .size(getResources().getDimensionPixelSize(R.dimen.divider))
-                .margin(getResources().getDimensionPixelSize(R.dimen.leftmargin),
-                        getResources().getDimensionPixelSize(R.dimen.rightmargin))
+                .sizeResId(R.dimen.divider)
+                .marginResId(R.dimen.leftmargin, R.dimen.rightmargin)
                 .build());
 ```
 

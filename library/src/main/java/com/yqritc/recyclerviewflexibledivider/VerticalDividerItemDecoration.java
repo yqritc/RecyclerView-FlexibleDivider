@@ -3,6 +3,7 @@ package com.yqritc.recyclerviewflexibledivider;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DimenRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -120,6 +121,19 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
                     return bottomMargin;
                 }
             });
+        }
+
+        public Builder margin(int verticalMargin) {
+            return margin(verticalMargin, verticalMargin);
+        }
+
+        public Builder marginResId(@DimenRes int topMarginId, @DimenRes int bottomMarginId) {
+            return margin(mResources.getDimensionPixelSize(topMarginId),
+                    mResources.getDimensionPixelSize(bottomMarginId));
+        }
+
+        public Builder marginResId(@DimenRes int verticalMarginId) {
+            return marginResId(verticalMarginId, verticalMarginId);
         }
 
         public Builder marginProvider(MarginProvider provider) {
