@@ -81,14 +81,24 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+        int lastChildPosition = -1;
         int childCount = mShowLastDivider ? parent.getChildCount() : parent.getChildCount() - 1;
         for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
             int childPosition = parent.getChildPosition(child);
-            if (mVisibilityProvider.shouldHideDivider(childPosition, parent)) {
+
+            if (childPosition < lastChildPosition) {
+                // Avoid remaining divider when animation starts
                 continue;
             }
+            lastChildPosition = childPosition;
+
             if (child.getAlpha() < 1) {
+                // Avoid remaining divider when animation starts
+                continue;
+            }
+
+            if (mVisibilityProvider.shouldHideDivider(childPosition, parent)) {
                 continue;
             }
 
