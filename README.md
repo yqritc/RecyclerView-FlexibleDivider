@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.yqritc:recyclerview-flexibledivider:1.2.1'
+    compile 'com.yqritc:recyclerview-flexibledivider:1.2.3'
 }
 ```
 
