@@ -14,7 +14,7 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
 
     private MarginProvider mMarginProvider;
 
-    private HorizontalDividerItemDecoration(Builder builder) {
+    protected HorizontalDividerItemDecoration(Builder builder) {
         super(builder);
         mMarginProvider = builder.mMarginProvider;
     }
@@ -22,18 +22,20 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
     @Override
     protected Rect getDividerBound(int position, RecyclerView parent, View child) {
         Rect bounds = new Rect(0, 0, 0, 0);
+        int transitionX = (int) child.getTranslationX();
+        int transitionY = (int) child.getTranslationY();
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
         bounds.left = parent.getPaddingLeft() +
-                mMarginProvider.dividerLeftMargin(position, parent);
+                mMarginProvider.dividerLeftMargin(position, parent) + transitionX;
         bounds.right = parent.getWidth() - parent.getPaddingRight() -
-                mMarginProvider.dividerRightMargin(position, parent);
+                mMarginProvider.dividerRightMargin(position, parent) + transitionX;
 
         int dividerSize = getDividerSize(position, parent);
         if (mDividerType == DividerType.DRAWABLE) {
-            bounds.top = child.getBottom() + params.topMargin;
+            bounds.top = child.getBottom() + params.topMargin + transitionY;
             bounds.bottom = bounds.top + dividerSize;
         } else {
-            bounds.top = child.getBottom() + params.topMargin + dividerSize / 2;
+            bounds.top = child.getBottom() + params.topMargin + dividerSize / 2 + transitionY;
             bounds.bottom = bounds.top;
         }
 
@@ -42,17 +44,7 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
 
     @Override
     protected void setItemOffsets(Rect outRect, int position, RecyclerView parent) {
-        int size = getDividerSize(position, parent);
-        if (position == 0) {
-            outRect.set(0, 0, 0, size / 2);
-        } else {
-            int lastItemSize = getDividerSize(position - 1, parent);
-            if (position == parent.getLayoutManager().getItemCount() - 1) {
-                outRect.set(0, lastItemSize / 2, 0, size);
-            } else {
-                outRect.set(0, lastItemSize / 2, 0, size / 2);
-            }
-        }
+        outRect.set(0, 0, 0, getDividerSize(position, parent));
     }
 
     private int getDividerSize(int position, RecyclerView parent) {

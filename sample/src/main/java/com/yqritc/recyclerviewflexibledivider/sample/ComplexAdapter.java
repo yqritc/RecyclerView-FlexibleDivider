@@ -69,7 +69,7 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
                     paint.setColor(Color.GREEN);
 
                 }
-                paint.setStrokeWidth(2+position);
+                paint.setStrokeWidth(2 + position);
                 break;
         }
 
@@ -114,19 +114,19 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
 
     @Override
     public int dividerLeftMargin(int position, RecyclerView parent) {
-        if(position<10) {
+        if (position < 10) {
             return position * 20;
-        }else{
-            return (20-position) * 20;
+        } else {
+            return (20 - position) * 20;
         }
     }
 
     @Override
     public int dividerRightMargin(int position, RecyclerView parent) {
-        if(position<10) {
-            return position * 20;
-        }else{
-            return (20-position) * 20;
+        if (position < 10) {
+            return position * 20 + 20;
+        } else {
+            return (20 - position) * 20 + 20;
         }
     }
 
