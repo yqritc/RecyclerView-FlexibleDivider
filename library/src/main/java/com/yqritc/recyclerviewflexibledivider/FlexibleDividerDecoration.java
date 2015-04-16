@@ -84,7 +84,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         int childCount = mShowLastDivider ? parent.getChildCount() : parent.getChildCount() - 1;
         for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
-            int childPosition = parent.getChildAdapterPosition(child);
+            int childPosition = parent.getChildPosition(child);
             if (mVisibilityProvider.shouldHideDivider(childPosition, parent)) {
                 continue;
             }
@@ -114,7 +114,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
     @Override
     public void getItemOffsets(Rect rect, View v, RecyclerView parent, RecyclerView.State state) {
-        int position = parent.getChildAdapterPosition(v);
+        int position = parent.getChildPosition(v);
         setItemOffsets(rect, position, parent);
     }
 
