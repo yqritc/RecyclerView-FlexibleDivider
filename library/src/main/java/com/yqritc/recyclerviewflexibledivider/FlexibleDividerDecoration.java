@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -93,7 +94,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             }
             lastChildPosition = childPosition;
 
-            if (child.getAlpha() < 1) {
+            if (ViewCompat.getAlpha(child) < 1) {
                 // Avoid remaining divider when animation starts
                 continue;
             }
