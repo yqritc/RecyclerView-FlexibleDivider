@@ -72,7 +72,7 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
          * @param parent   RecyclerView
          * @return top margin
          */
-        public int dividerTopMargin(int position, RecyclerView parent);
+        int dividerTopMargin(int position, RecyclerView parent);
 
         /**
          * Returns bottom margin of divider.
@@ -81,7 +81,7 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
          * @param parent   RecyclerView
          * @return bottom margin
          */
-        public int dividerBottomMargin(int position, RecyclerView parent);
+        int dividerBottomMargin(int position, RecyclerView parent);
     }
 
     public static class Builder extends FlexibleDividerDecoration.Builder<Builder> {

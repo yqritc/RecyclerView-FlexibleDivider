@@ -8,7 +8,7 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 
-public class PaintActivity extends ActionBarActivity {
+public class PaintActivity extends AppCompatActivity {
 
     public static void startActivity(Activity activity) {
         Intent intent = new Intent(activity, PaintActivity.class);

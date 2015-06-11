@@ -86,7 +86,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         int childCount = mShowLastDivider ? parent.getChildCount() : parent.getChildCount() - 1;
         for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
-            int childPosition = parent.getChildPosition(child);
+            int childPosition = parent.getChildAdapterPosition(child);
 
             if (childPosition < lastChildPosition) {
                 // Avoid remaining divider when animation starts
@@ -125,7 +125,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
     @Override
     public void getItemOffsets(Rect rect, View v, RecyclerView parent, RecyclerView.State state) {
-        int position = parent.getChildPosition(v);
+        int position = parent.getChildAdapterPosition(v);
         setItemOffsets(rect, position, parent);
     }
 
@@ -145,7 +145,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
          * @param parent   RecyclerView
          * @return True if the divider at position should be hidden
          */
-        public boolean shouldHideDivider(int position, RecyclerView parent);
+        boolean shouldHideDivider(int position, RecyclerView parent);
     }
 
     /**
@@ -160,7 +160,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
          * @param parent   RecyclerView
          * @return Paint instance
          */
-        public Paint dividerPaint(int position, RecyclerView parent);
+        Paint dividerPaint(int position, RecyclerView parent);
     }
 
     /**
@@ -175,7 +175,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
          * @param parent   RecyclerView
          * @return Color value
          */
-        public int dividerColor(int position, RecyclerView parent);
+        int dividerColor(int position, RecyclerView parent);
     }
 
     /**
@@ -190,7 +190,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
          * @param parent   RecyclerView
          * @return Drawable instance
          */
-        public Drawable drawableProvider(int position, RecyclerView parent);
+        Drawable drawableProvider(int position, RecyclerView parent);
     }
 
     /**
@@ -206,7 +206,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
          * @param parent   RecyclerView
          * @return Size of divider
          */
-        public int dividerSize(int position, RecyclerView parent);
+        int dividerSize(int position, RecyclerView parent);
     }
 
     public static class Builder<T extends Builder> {

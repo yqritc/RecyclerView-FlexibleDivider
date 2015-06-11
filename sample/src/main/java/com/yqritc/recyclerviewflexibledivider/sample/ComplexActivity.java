@@ -5,7 +5,7 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 
-public class ComplexActivity extends ActionBarActivity {
+public class ComplexActivity extends AppCompatActivity {
 
     public static void startActivity(Activity activity) {
         Intent intent = new Intent(activity, ComplexActivity.class);
