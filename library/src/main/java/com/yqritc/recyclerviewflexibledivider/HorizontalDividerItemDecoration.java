@@ -72,7 +72,7 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
          * @param parent   RecyclerView
          * @return left margin
          */
-        public int dividerLeftMargin(int position, RecyclerView parent);
+        int dividerLeftMargin(int position, RecyclerView parent);
 
         /**
          * Returns right margin of divider.
@@ -81,7 +81,7 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
          * @param parent   RecyclerView
          * @return right margin
          */
-        public int dividerRightMargin(int position, RecyclerView parent);
+        int dividerRightMargin(int position, RecyclerView parent);
     }
 
     public static class Builder extends FlexibleDividerDecoration.Builder<Builder> {
