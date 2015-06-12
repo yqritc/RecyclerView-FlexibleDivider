@@ -28,7 +28,7 @@ The following is the simplest usage.
 Drawing a divider drawable retrieved from android.R.attr.listDivider between each cell.
 ```
 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this))
+recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build())
 ```
 
 If you want to set color, size and margin values, you can specify as the followings.
