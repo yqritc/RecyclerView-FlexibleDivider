@@ -7,6 +7,10 @@
         android:title="@string/menu_simple"
         app:showAsAction="never"/>
     <item
+        android:id="@+id/action_simple_grid"
+        android:title="@string/menu_simple_grid"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/action_paint"
         android:title="@string/menu_paint"
         app:showAsAction="never"/>
