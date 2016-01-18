@@ -21,7 +21,7 @@ android {
 
 dependencies {
     compile project(':library')
-//    compile 'com.yqritc:recyclerview-flexibledivider:1.2.6'
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:recyclerview-v7:23.0.1'
+//    compile 'com.yqritc:recyclerview-flexibledivider:1.2.7'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
 }
