@@ -108,6 +108,8 @@ FlexibleDividerDecoration.Builder.showLastDivider
 - If you want to use DashPathEffect, please note the following issue.
 https://code.google.com/p/android/issues/detail?id=29944
 
+##### _Looking for custom ItemDecoration to achieve equal column space for GridLayoutManager?_
+Check out [https://gist.github.com/yqritc/ccca77dc42f2364777e1](https://gist.github.com/yqritc/ccca77dc42f2364777e1)
 
 # License
 ```
