@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -341,7 +342,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         }
 
         public T colorResId(@ColorRes int colorId) {
-            return color(mResources.getColor(colorId));
+            return color(ContextCompat.getColor(mContext, colorId));
         }
 
         public T colorProvider(ColorProvider provider) {
@@ -350,7 +351,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         }
 
         public T drawable(@DrawableRes int id) {
-            return drawable(mResources.getDrawable(id));
+            return drawable(ContextCompat.getDrawable(mContext, id));
         }
 
         public T drawable(final Drawable drawable) {
