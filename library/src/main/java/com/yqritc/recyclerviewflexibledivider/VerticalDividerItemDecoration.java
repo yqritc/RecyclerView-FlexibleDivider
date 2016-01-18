@@ -68,7 +68,7 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
         /**
          * Returns top margin of divider.
          *
-         * @param position Divider position
+         * @param position Divider position (or group index for GridLayoutManager)
          * @param parent   RecyclerView
          * @return top margin
          */
@@ -77,7 +77,7 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
         /**
          * Returns bottom margin of divider.
          *
-         * @param position Divider position
+         * @param position Divider position (or group index for GridLayoutManager)
          * @param parent   RecyclerView
          * @return bottom margin
          */

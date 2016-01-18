@@ -3,8 +3,8 @@
 
     <string name="app_name">FlexibleDivider Sample</string>
     <string name="menu_simple">Simple Divider List</string>
-    <string name="menu_simple_grid">Simple Divider Grid</string>
     <string name="menu_paint">Paint Divider List</string>
     <string name="menu_drawable">Drawable Divider List</string>
     <string name="menu_complex">Complex Divider List</string>
+    <string name="menu_simple_grid">Simple Divider Grid</string>
 </resources>

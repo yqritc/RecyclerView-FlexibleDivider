@@ -68,7 +68,7 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
         /**
          * Returns left margin of divider.
          *
-         * @param position Divider position
+         * @param position Divider position (or group index for GridLayoutManager)
          * @param parent   RecyclerView
          * @return left margin
          */
@@ -77,7 +77,7 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
         /**
          * Returns right margin of divider.
          *
-         * @param position Divider position
+         * @param position Divider position (or group index for GridLayoutManager)
          * @param parent   RecyclerView
          * @return right margin
          */

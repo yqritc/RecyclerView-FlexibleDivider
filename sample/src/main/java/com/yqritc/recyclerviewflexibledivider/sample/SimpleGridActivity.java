@@ -1,17 +1,16 @@
 package com.yqritc.recyclerviewflexibledivider.sample;
 
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 
 public class SimpleGridActivity extends AppCompatActivity {
@@ -28,7 +27,8 @@ public class SimpleGridActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sample);
 
         SimpleAdapter adapter = new SimpleAdapter(this);
-        GridLayoutManager manager = new GridLayoutManager(this,3);
+        GridLayoutManager manager = new GridLayoutManager(this, 3);
+        manager.setOrientation(OrientationHelper.VERTICAL);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
@@ -48,9 +48,6 @@ public class SimpleGridActivity extends AppCompatActivity {
             case R.id.action_simple:
                 SimpleActivity.startActivity(this);
                 return true;
-            case R.id.action_simple_grid:
-                SimpleGridActivity.startActivity(this);
-                return true;
             case R.id.action_paint:
                 PaintActivity.startActivity(this);
                 return true;
@@ -59,6 +56,9 @@ public class SimpleGridActivity extends AppCompatActivity {
                 return true;
             case R.id.action_complex:
                 ComplexActivity.startActivity(this);
+                return true;
+            case R.id.action_simple_grid:
+                SimpleGridActivity.startActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

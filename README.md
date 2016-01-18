@@ -66,7 +66,8 @@ recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
 If you want to customize divider depending on the position, implement the following interfaces.
 
 ### List of provider
-The following providers can be implemented and controllable for each divider drawn between cells.
+The following providers can be implemented and controllable for each divider drawn between cells.  
+Please refer to ComplexAdapter class in the [sample](/sample/src/main/java/com/yqritc/recyclerviewflexibledivider/sample) for the usage of providers in detail.
 
 - ColorProvider
 Provide color for divider
@@ -87,9 +88,10 @@ Enables you to control the visibility of dividers.
 Enables you to specify left and right margin of divider.
 
 - MarginProvider for vertical divider (horizontal list)  
-Enables you to specify top and bottom margin of divider.
+Enables you to specify top and bottom margin of divider.  
 
-Please refer to ComplexAdapter class in the [sample](/sample/src/main/java/com/yqritc/recyclerviewflexibledivider/sample) for the usage of providers in detail.
+**For GridLayoutManager**, the position parameter of above providers is group index of items.
+So, control your divider based on [group index](http://developer.android.com/intl/ja/reference/android/support/v7/widget/GridLayoutManager.SpanSizeLookup.html#getSpanGroupIndex(int, int)) instead of the position of items.
 
 ### Optional
 
