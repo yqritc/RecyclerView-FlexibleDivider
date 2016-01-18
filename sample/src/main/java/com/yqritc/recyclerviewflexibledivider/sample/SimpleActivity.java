@@ -48,6 +48,9 @@ public class SimpleActivity extends AppCompatActivity {
             case R.id.action_simple:
                 SimpleActivity.startActivity(this);
                 return true;
+            case R.id.action_simple_grid:
+                SimpleGridActivity.startActivity(this);
+                return true;
             case R.id.action_paint:
                 PaintActivity.startActivity(this);
                 return true;

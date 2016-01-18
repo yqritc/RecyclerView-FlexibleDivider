@@ -11,6 +11,8 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -83,7 +85,9 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         int lastChildPosition = -1;
-        int childCount = mShowLastDivider ? parent.getChildCount() : parent.getChildCount() - 1;
+        int lastDividerOffset = getLastDividerOffset(parent);
+
+        int childCount = mShowLastDivider ? parent.getChildCount() : parent.getChildCount() - lastDividerOffset;
         for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
             int childPosition = parent.getChildAdapterPosition(child);
@@ -92,7 +96,14 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
                 // Avoid remaining divider when animation starts
                 continue;
             }
+            boolean dividerWasAlreadyDrawn = wasDividerAlreadyDrawnForPosition(parent,childPosition,lastChildPosition);
+
             lastChildPosition = childPosition;
+
+            if (dividerWasAlreadyDrawn) {
+                // no need to draw divider again as it was drawn already by previous column
+                continue;
+            }
 
             if (ViewCompat.getAlpha(child) < 1) {
                 // Avoid remaining divider when animation starts
@@ -102,6 +113,8 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             if (mVisibilityProvider.shouldHideDivider(childPosition, parent)) {
                 continue;
             }
+
+
 
             Rect bounds = getDividerBound(childPosition, parent, child);
             switch (mDividerType) {
@@ -121,6 +134,55 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
                     break;
             }
         }
+    }
+
+    /**
+     * Determines whether divider was already drawn for the row the item is in,
+     * effectively only makes sense for a grid
+     *
+     * @param parent RecyclerView
+     * @param position current view position to draw divider
+     * @param lastChildPosition previous view position
+     * @return true if the divider can be skipped as it is in the same row as the previous one.
+     */
+    private boolean wasDividerAlreadyDrawnForPosition(RecyclerView parent, int position, int lastChildPosition) {
+        if (parent.getLayoutManager() instanceof GridLayoutManager) {
+            GridLayoutManager gridLayoutManager = (GridLayoutManager) parent.getLayoutManager();
+            int spanCount = gridLayoutManager.getSpanCount();
+            GridLayoutManager.SpanSizeLookup spanSizeLockup = gridLayoutManager.getSpanSizeLookup();
+            if (spanSizeLockup.getSpanGroupIndex(position,spanCount) == spanSizeLockup.getSpanGroupIndex(lastChildPosition,spanCount) && lastChildPosition != -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns offset for how many views we don't have to draw a divider for,
+     * for LinearLayoutManager it is as simple as not drawing the last child divider,
+     * but for a GridLayoutManager it needs to take the span count for the last items into account
+     * until we use the span count configured for the grid.
+     *
+     * @param parent   RecyclerView
+     * @return offset for how many views we don't have to draw a divider or 1 if its a LinearLayoutManager
+     */
+    private int getLastDividerOffset(RecyclerView parent) {
+        if (parent.getLayoutManager() instanceof GridLayoutManager) {
+            GridLayoutManager gridLayoutManager = (GridLayoutManager) parent.getLayoutManager();
+            int spanCount = gridLayoutManager.getSpanCount();
+            int itemCount = parent.getAdapter().getItemCount();
+            int lastRowItems = itemCount % spanCount;
+            int lastItemIndex =itemCount - 1;
+            GridLayoutManager.SpanSizeLookup spanSizeLookup = gridLayoutManager.getSpanSizeLookup();
+            int lastRowSpanSize = 0;
+            for (int i=lastItemIndex;i>0;i--) {
+                lastRowSpanSize += spanSizeLookup.getSpanSize(i);
+                if (lastRowSpanSize >= spanCount || i == lastItemIndex - lastRowItems) {
+                    return itemCount - i;
+                }
+            }
+        }
+        return 1;
     }
 
     @Override

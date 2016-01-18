@@ -21,6 +21,9 @@
             android:name=".PaintActivity"
             android:label="@string/menu_paint"/>
         <activity
+            android:name=".SimpleGridActivity"
+            android:label="@string/menu_simple_grid"/>
+        <activity
             android:name=".DrawableActivity"
             android:label="@string/menu_drawable"/>
         <activity
