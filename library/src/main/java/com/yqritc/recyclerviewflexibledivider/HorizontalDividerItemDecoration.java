@@ -21,6 +21,16 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
     }
 
     @Override
+    protected int getChildCount(RecyclerView parent) {
+        return super.getChildCount(parent);
+    }
+
+    @Override
+    protected boolean wasDividerAlreadyDrawnForPosition(RecyclerView parent, int position, int lastChildPosition) {
+        return super.wasDividerAlreadyDrawnForPosition(parent, position, lastChildPosition);
+    }
+
+    @Override
     protected Rect getDividerBound(int position, RecyclerView parent, View child) {
         Rect bounds = new Rect(0, 0, 0, 0);
         int transitionX = (int) ViewCompat.getTranslationX(child);

@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
+import com.yqritc.recyclerviewflexibledivider.HorizontalGridDividerItemDecoration;
 
 
 public class SimpleGridActivity extends AppCompatActivity {
@@ -32,7 +30,7 @@ public class SimpleGridActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
+        recyclerView.addItemDecoration(new HorizontalGridDividerItemDecoration.Builder(this).build());
     }
 
 
