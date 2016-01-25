@@ -5,6 +5,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DimenRes;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -23,24 +24,40 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
     @Override
     protected Rect getDividerBound(int position, RecyclerView parent, View child) {
         Rect bounds = new Rect(0, 0, 0, 0);
-        int transitionX = (int) ViewCompat.getTranslationX(child);
-        int transitionY = (int) ViewCompat.getTranslationY(child);
+        int viewY = (int) ViewCompat.getY(child);
+
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
         bounds.top = parent.getPaddingTop() +
-                mMarginProvider.dividerTopMargin(position, parent) + transitionY;
-        bounds.bottom = parent.getHeight() - parent.getPaddingBottom() -
-                mMarginProvider.dividerBottomMargin(position, parent) + transitionY;
+                mMarginProvider.dividerTopMargin(position, parent) + viewY;
+        bounds.bottom = viewY + child.getMeasuredHeight()
+                - mMarginProvider.dividerBottomMargin(position,parent);
 
         int dividerSize = getDividerSize(position, parent);
         if (mDividerType == DividerType.DRAWABLE) {
-            bounds.left = child.getRight() + params.leftMargin + transitionX;
+            bounds.left = child.getRight() + params.leftMargin;
             bounds.right = bounds.left + dividerSize;
         } else {
-            bounds.left = child.getRight() + params.leftMargin + dividerSize / 2 + transitionX;
+            bounds.left = child.getRight() + params.leftMargin + dividerSize / 2;
             bounds.right = bounds.left;
         }
 
         return bounds;
+    }
+
+    @Override
+    protected boolean wasDividerAlreadyDrawn(int position, RecyclerView parent) {
+        return false;
+    }
+
+    protected boolean isLastItem(int childPosition, RecyclerView parent){
+        if (parent.getLayoutManager() instanceof GridLayoutManager) {
+            GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
+            GridLayoutManager.SpanSizeLookup spanSizeLookup = layoutManager.getSpanSizeLookup();
+            int spanCount = layoutManager.getSpanCount();
+            return spanSizeLookup.getSpanIndex(childPosition, spanCount) == spanCount - 1;
+        }
+
+        return super.isLastItem(childPosition, parent);
     }
 
     @Override

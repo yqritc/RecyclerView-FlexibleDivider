@@ -83,8 +83,6 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        int itemCount = parent.getAdapter().getItemCount();
-        int lastDividerOffset = getLastDividerOffset(parent);
         int validChildCount = parent.getChildCount();
         int lastChildPosition = -1;
         for (int i = 0; i < validChildCount; i++) {
@@ -97,7 +95,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             }
             lastChildPosition = childPosition;
 
-            if (!mShowLastDivider && childPosition >= itemCount - lastDividerOffset) {
+            if (!mShowLastDivider && isLastItem(childPosition, parent)) {
                 // Don't draw divider for last line if mShowLastDivider = false
                 continue;
             }
@@ -174,6 +172,20 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     }
 
     /**
+     * In the case mShowLastDivider = false,
+     * Determine whether this child position is the last position (or in the last row), so that
+     * a divider won't be drawn.
+     *
+     * @param parent RecyclerView
+     * @return whether this position is the last position in the recyclerview
+     */
+    protected boolean isLastItem(int childPosition, RecyclerView parent){
+        int itemCount = parent.getAdapter().getItemCount();
+        int lastDividerOffset = getLastDividerOffset(parent);
+        return childPosition >= itemCount - lastDividerOffset;
+    }
+
+    /**
      * Determines whether divider was already drawn for the row the item is in,
      * effectively only makes sense for a grid
      *
@@ -181,16 +193,8 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
      * @param parent   RecyclerView
      * @return true if the divider can be skipped as it is in the same row as the previous one.
      */
-    private boolean wasDividerAlreadyDrawn(int position, RecyclerView parent) {
-        if (parent.getLayoutManager() instanceof GridLayoutManager) {
-            GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
-            GridLayoutManager.SpanSizeLookup spanSizeLookup = layoutManager.getSpanSizeLookup();
-            int spanCount = layoutManager.getSpanCount();
-            return spanSizeLookup.getSpanIndex(position, spanCount) > 0;
-        }
+    protected abstract boolean wasDividerAlreadyDrawn(int position, RecyclerView parent);
 
-        return false;
-    }
 
     /**
      * Returns a group index for GridLayoutManager.
