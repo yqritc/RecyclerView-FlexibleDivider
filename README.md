@@ -24,12 +24,18 @@ dependencies {
 
 # Usage
 
-The following is the simplest usage.
+The following is the simplest usage.  
 Drawing a divider drawable retrieved from android.R.attr.listDivider between each cell.
 ```
 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
 ```
+
+| ItemDecoration         | Usage |
+|:------------------|:----------|
+| HorizontalDividerItemDecoration         | For layout manager having vertical orientation to draw horizontal divider |
+| VerticalDividerItemDecoration         | For layout manager having horizontal orientation to draw vertical divider |
+_*Please note that you can only set one of above item decorations at a time._
 
 If you want to set color, size and margin values, you can specify as the followings.
 ```
