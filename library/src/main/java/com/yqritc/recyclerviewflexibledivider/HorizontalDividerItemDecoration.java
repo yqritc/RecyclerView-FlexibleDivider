@@ -5,6 +5,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DimenRes;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -58,6 +59,18 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
             return drawable.getIntrinsicHeight();
         }
         throw new RuntimeException("failed to get size");
+    }
+
+    @Override
+    protected boolean wasDividerAlreadyDrawn(int position, RecyclerView parent) {
+        if (parent.getLayoutManager() instanceof GridLayoutManager) {
+            GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
+            GridLayoutManager.SpanSizeLookup spanSizeLookup = layoutManager.getSpanSizeLookup();
+            int spanCount = layoutManager.getSpanCount();
+            return spanSizeLookup.getSpanIndex(position, spanCount) > 0;
+        }
+
+        return false;
     }
 
     /**
