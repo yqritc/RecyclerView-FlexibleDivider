@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.yqritc:recyclerview-flexibledivider:1.2.8'
+    compile 'com.yqritc:recyclerview-flexibledivider:1.2.9'
 }
 ```
 
@@ -100,13 +100,15 @@ Enables you to specify top and bottom margin of divider.
 So, control your divider based on [group index](http://developer.android.com/intl/ja/reference/android/support/v7/widget/GridLayoutManager.SpanSizeLookup.html#getSpanGroupIndex(int, int)) instead of the position of items.
 
 ### Optional
-
-The following method can be used if you want to draw divider line at the end of last item in RecyclerView.
+- Builder.showLastDivider  
+Draw divider line at the end of last item in RecyclerView.
 If you enable this, the range of position parameter of providers listed above is 0 to itemCount-1.
-Otherwise, the range is 0 to itemCount-2.
-```
-FlexibleDividerDecoration.Builder.showLastDivider
-```
+Otherwise, the range is 0 to itemCount-2.  
+
+- Builder.positionInsideItem  
+Draw divider inside items.  
+If you want to follow [material design guideline](https://www.google.com/design/spec/components/dividers.html#dividers-specs), enable this feature.
+
 
 ### Note
 - When neither of color, paint, drawable is set, default divider retrieved from android.R.attr.listDivider will be used.
