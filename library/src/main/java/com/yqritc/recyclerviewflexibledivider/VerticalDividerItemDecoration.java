@@ -33,10 +33,21 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
 
         int dividerSize = getDividerSize(position, parent);
         if (mDividerType == DividerType.DRAWABLE) {
-            bounds.left = child.getRight() + params.leftMargin + transitionX;
-            bounds.right = bounds.left + dividerSize;
+            // set left and right position of divider
+            if (mPositionInsideItem) {
+                bounds.right = child.getRight() + params.leftMargin + transitionX;
+                bounds.left = bounds.right - dividerSize;
+            } else {
+                bounds.left = child.getRight() + params.leftMargin + transitionX;
+                bounds.right = bounds.left + dividerSize;
+            }
         } else {
-            bounds.left = child.getRight() + params.leftMargin + dividerSize / 2 + transitionX;
+            // set center point of divider
+            if (mPositionInsideItem) {
+                bounds.left = child.getRight() + params.leftMargin - dividerSize / 2 + transitionX;
+            } else {
+                bounds.left = child.getRight() + params.leftMargin + dividerSize / 2 + transitionX;
+            }
             bounds.right = bounds.left;
         }
 
@@ -45,7 +56,11 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
 
     @Override
     protected void setItemOffsets(Rect outRect, int position, RecyclerView parent) {
-        outRect.set(0, 0, getDividerSize(position, parent), 0);
+        if (mPositionInsideItem) {
+            outRect.set(0, 0, 0, 0);
+        } else {
+            outRect.set(0, 0, getDividerSize(position, parent), 0);
+        }
     }
 
     private int getDividerSize(int position, RecyclerView parent) {

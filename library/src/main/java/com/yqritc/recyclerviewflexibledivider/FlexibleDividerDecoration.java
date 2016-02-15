@@ -36,6 +36,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     protected DrawableProvider mDrawableProvider;
     protected SizeProvider mSizeProvider;
     protected boolean mShowLastDivider;
+    protected boolean mPositionInsideItem;
     private Paint mPaint;
 
     protected FlexibleDividerDecoration(Builder builder) {
@@ -67,6 +68,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
         mVisibilityProvider = builder.mVisibilityProvider;
         mShowLastDivider = builder.mShowLastDivider;
+        mPositionInsideItem = builder.mPositionInsideItem;
     }
 
     private void setSizeProvider(Builder builder) {
@@ -311,6 +313,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             }
         };
         private boolean mShowLastDivider = false;
+        private boolean mPositionInsideItem = false;
 
         public Builder(Context context) {
             mContext = context;
@@ -392,6 +395,11 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
         public T showLastDivider() {
             mShowLastDivider = true;
+            return (T) this;
+        }
+
+        public T positionInsideItem(boolean positionInsideItem) {
+            mPositionInsideItem = positionInsideItem;
             return (T) this;
         }
 
