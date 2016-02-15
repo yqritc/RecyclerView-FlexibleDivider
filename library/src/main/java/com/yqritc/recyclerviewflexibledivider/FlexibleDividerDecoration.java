@@ -84,7 +84,11 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         RecyclerView.Adapter adapter = parent.getAdapter();
-        int itemCount = adapter == null ? 0 : adapter.getItemCount();
+        if (adapter == null) {
+            return;
+        }
+
+        int itemCount = adapter.getItemCount();
         int lastDividerOffset = getLastDividerOffset(parent);
         int validChildCount = parent.getChildCount();
         int lastChildPosition = -1;
@@ -135,9 +139,8 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
     @Override
     public void getItemOffsets(Rect rect, View v, RecyclerView parent, RecyclerView.State state) {
-        RecyclerView.Adapter adapter = parent.getAdapter();
-        int position = adapter == null ? 0 : parent.getChildAdapterPosition(v);
-        int itemCount = adapter == null ? 0 : adapter.getItemCount();
+        int position = parent.getChildAdapterPosition(v);
+        int itemCount = parent.getAdapter().getItemCount();
         int lastDividerOffset = getLastDividerOffset(parent);
         if (!mShowLastDivider && position >= itemCount - lastDividerOffset) {
             // Don't set item offset for last line if mShowLastDivider = false
@@ -161,11 +164,10 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
      */
     private int getLastDividerOffset(RecyclerView parent) {
         if (parent.getLayoutManager() instanceof GridLayoutManager) {
-            RecyclerView.Adapter adapter = parent.getAdapter();
             GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
             GridLayoutManager.SpanSizeLookup spanSizeLookup = layoutManager.getSpanSizeLookup();
             int spanCount = layoutManager.getSpanCount();
-            int itemCount = adapter == null ? 0 : adapter.getItemCount();
+            int itemCount = parent.getAdapter().getItemCount();
             for (int i = itemCount - 1; i >= 0; i--) {
                 if (spanSizeLookup.getSpanIndex(i, spanCount) == 0) {
                     return itemCount - i;

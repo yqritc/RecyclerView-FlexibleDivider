@@ -7,10 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ParallelExecutorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -33,17 +30,18 @@ public class PaintActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         // Workaround for dash path effect
         // https://code.google.com/p/android/issues/detail?id=29944
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             recyclerView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
-        final SimpleAdapter adapter = new SimpleAdapter(this);
+        SimpleAdapter adapter = new SimpleAdapter(this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(OrientationHelper.VERTICAL);
         recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
 
         Paint paint = new Paint();
         paint.setStrokeWidth(5);
@@ -54,30 +52,6 @@ public class PaintActivity extends AppCompatActivity {
                 .paint(paint)
                 .showLastDivider()
                 .build());
-
-        // Delay to add adapter, so to check if it will crash on adding decoration to empty recyclerView
-        AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                recyclerView.setAdapter(adapter);
-            }
-        };
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
-            asyncTask.execute();
-        } else {
-            asyncTask.executeOnExecutor(ParallelExecutorCompat.getParallelExecutor());
-        }
     }
 
 
