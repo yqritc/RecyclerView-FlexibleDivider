@@ -1,7 +1,5 @@
 package com.yqritc.recyclerviewflexibledivider.sample;
 
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +9,8 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 
 public class SimpleActivity extends AppCompatActivity {
@@ -27,12 +27,12 @@ public class SimpleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sample);
 
         SimpleAdapter adapter = new SimpleAdapter(this);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
+        LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, true);
         manager.setOrientation(OrientationHelper.VERTICAL);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).reverse(true).build());
     }
 
 
@@ -59,6 +59,9 @@ public class SimpleActivity extends AppCompatActivity {
                 return true;
             case R.id.action_simple_grid:
                 SimpleGridActivity.startActivity(this);
+                return true;
+            case R.id.action_all_linear:
+                AllLinearActivity.startActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

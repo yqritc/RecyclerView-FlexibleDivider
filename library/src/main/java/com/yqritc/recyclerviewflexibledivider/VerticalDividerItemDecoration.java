@@ -35,18 +35,36 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
         if (mDividerType == DividerType.DRAWABLE) {
             // set left and right position of divider
             if (mPositionInsideItem) {
-                bounds.right = child.getRight() + params.leftMargin + transitionX;
-                bounds.left = bounds.right - dividerSize;
+                if (mReverse) {
+                    bounds.right = child.getLeft() + params.rightMargin + transitionX;
+                    bounds.left = bounds.right + dividerSize;
+                } else {
+                    bounds.right = child.getRight() + params.leftMargin + transitionX;
+                    bounds.left = bounds.right - dividerSize;
+                }
             } else {
-                bounds.left = child.getRight() + params.leftMargin + transitionX;
-                bounds.right = bounds.left + dividerSize;
+                if (mReverse) {
+                    bounds.left = child.getLeft() - params.leftMargin + transitionX;
+                    bounds.right = bounds.left - dividerSize;
+                } else {
+                    bounds.left = child.getRight() + params.leftMargin + transitionX;
+                    bounds.right = bounds.left + dividerSize;
+                }
             }
         } else {
             // set center point of divider
             if (mPositionInsideItem) {
-                bounds.left = child.getRight() + params.leftMargin - dividerSize / 2 + transitionX;
+                if (mReverse) {
+                    bounds.left = child.getLeft() + params.rightMargin - dividerSize / 2 + transitionX;
+                } else {
+                    bounds.left = child.getRight() + params.leftMargin - dividerSize / 2 + transitionX;
+                }
             } else {
-                bounds.left = child.getRight() + params.leftMargin + dividerSize / 2 + transitionX;
+                if (mReverse) {
+                    bounds.left = child.getLeft() + params.rightMargin + dividerSize / 2 + transitionX;
+                } else {
+                    bounds.left = child.getRight() + params.leftMargin + dividerSize / 2 + transitionX;
+                }
             }
             bounds.right = bounds.left;
         }

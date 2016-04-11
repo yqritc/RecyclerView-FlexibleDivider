@@ -35,18 +35,36 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
         if (mDividerType == DividerType.DRAWABLE) {
             // set top and bottom position of divider
             if (mPositionInsideItem) {
-                bounds.bottom = child.getBottom() + params.topMargin + transitionY;
-                bounds.top = bounds.bottom - dividerSize;
+                if (mReverse) {
+                    bounds.bottom = child.getTop() - params.bottomMargin - transitionY;
+                    bounds.top = bounds.bottom + dividerSize;
+                } else {
+                    bounds.bottom = child.getBottom() + params.topMargin + transitionY;
+                    bounds.top = bounds.bottom - dividerSize;
+                }
             } else {
-                bounds.top = child.getBottom() + params.topMargin + transitionY;
-                bounds.bottom = bounds.top + dividerSize;
+                if (mReverse) {
+                    bounds.top = child.getTop() - params.bottomMargin - transitionY;
+                    bounds.bottom = bounds.top - dividerSize;
+                } else {
+                    bounds.top = child.getBottom() + params.topMargin + transitionY;
+                    bounds.bottom = bounds.top + dividerSize;
+                }
             }
         } else {
             // set center point of divider
             if (mPositionInsideItem) {
-                bounds.top = child.getBottom() + params.topMargin - dividerSize / 2 + transitionY;
+                if (mReverse) {
+                    bounds.top = child.getTop() + params.bottomMargin - dividerSize / 2 + transitionY;
+                } else {
+                    bounds.top = child.getBottom() + params.topMargin - dividerSize / 2 + transitionY;
+                }
             } else {
-                bounds.top = child.getBottom() + params.topMargin + dividerSize / 2 + transitionY;
+                if (mReverse) {
+                    bounds.top = child.getTop() + params.bottomMargin + dividerSize / 2 + transitionY;
+                } else {
+                    bounds.top = child.getBottom() + params.topMargin + dividerSize / 2 + transitionY;
+                }
             }
             bounds.bottom = bounds.top;
         }

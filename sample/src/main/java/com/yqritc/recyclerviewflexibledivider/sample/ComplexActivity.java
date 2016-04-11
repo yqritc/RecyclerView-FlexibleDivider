@@ -1,7 +1,5 @@
 package com.yqritc.recyclerviewflexibledivider.sample;
 
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 
 public class ComplexActivity extends AppCompatActivity {
@@ -70,6 +70,9 @@ public class ComplexActivity extends AppCompatActivity {
                 return true;
             case R.id.action_simple_grid:
                 SimpleGridActivity.startActivity(this);
+                return true;
+            case R.id.action_all_linear:
+                AllLinearActivity.startActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
