@@ -20,7 +20,7 @@ import com.yqritc.recyclerviewflexibledivider.FlexibleDividerDecoration;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 import com.yqritc.recyclerviewflexibledivider.VerticalDividerItemDecoration;
 
-public class AllLinearActivity extends AppCompatActivity {
+public class MoreComplexActivity extends AppCompatActivity {
 
     private SimpleAdapter adapter;
 
@@ -100,7 +100,7 @@ public class AllLinearActivity extends AppCompatActivity {
     }
 
     public static void startActivity(Activity activity) {
-        Intent intent = new Intent(activity, AllLinearActivity.class);
+        Intent intent = new Intent(activity, MoreComplexActivity.class);
         activity.startActivity(intent);
     }
 
@@ -248,7 +248,7 @@ public class AllLinearActivity extends AppCompatActivity {
                 SimpleGridActivity.startActivity(this);
                 return true;
             case R.id.action_all_linear:
-                AllLinearActivity.startActivity(this);
+                MoreComplexActivity.startActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

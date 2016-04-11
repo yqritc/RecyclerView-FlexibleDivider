@@ -80,7 +80,7 @@ public class PaintActivity extends AppCompatActivity {
                 SimpleGridActivity.startActivity(this);
                 return true;
             case R.id.action_all_linear:
-                AllLinearActivity.startActivity(this);
+                MoreComplexActivity.startActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

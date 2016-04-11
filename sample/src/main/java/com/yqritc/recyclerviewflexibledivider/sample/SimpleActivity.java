@@ -27,12 +27,12 @@ public class SimpleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sample);
 
         SimpleAdapter adapter = new SimpleAdapter(this);
-        LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, true);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(OrientationHelper.VERTICAL);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).reverse(true).build());
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
     }
 
 
@@ -61,7 +61,7 @@ public class SimpleActivity extends AppCompatActivity {
                 SimpleGridActivity.startActivity(this);
                 return true;
             case R.id.action_all_linear:
-                AllLinearActivity.startActivity(this);
+                MoreComplexActivity.startActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
