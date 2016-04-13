@@ -12,7 +12,7 @@ Android library providing simple way to control divider items of RecyclerView
 [Release Note] (https://github.com/yqritc/RecyclerView-FlexibleDivider/releases)
 
 # Gradle
-```
+```groovy
 repositories {
     jcenter()
 }
@@ -26,7 +26,7 @@ dependencies {
 
 The following is the simplest usage.  
 Drawing a divider drawable retrieved from android.R.attr.listDivider between each cell.
-```
+```java
 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
 ```
@@ -38,7 +38,7 @@ recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
 _*Please note that you can only set one of above item decorations at a time._
 
 If you want to set color, size and margin values, you can specify as the followings.
-```
+```java
 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 recyclerView.addItemDecoration(
         new HorizontalDividerItemDecoration.Builder(this)
@@ -50,7 +50,7 @@ recyclerView.addItemDecoration(
 
 
 Instead of setting color and size, you can set paint object.
-```
+```java
 Paint paint = new Paint();
 paint.setStrokeWidth(5);
 paint.setColor(Color.BLUE);
@@ -61,7 +61,7 @@ recyclerView.addItemDecoration(
 ```
 
 Also 9patch drawable can be used for drawing divider.
-```
+```java
 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
         .drawable(R.drawable.sample)
@@ -121,7 +121,7 @@ Check out [https://gist.github.com/yqritc/ccca77dc42f2364777e1](https://gist.git
 
 # License
 ```
-Copyright 2015 yqritc
+Copyright 2016 yqritc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
