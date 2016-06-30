@@ -22,4 +22,8 @@
         android:id="@+id/action_simple_grid"
         android:title="@string/menu_simple_grid"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_all_linear"
+        android:title="@string/menu_all_linear"
+        app:showAsAction="never"/>
 </menu>
