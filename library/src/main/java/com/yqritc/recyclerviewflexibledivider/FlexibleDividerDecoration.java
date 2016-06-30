@@ -150,6 +150,10 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         }
 
         int groupIndex = getGroupIndex(position, parent);
+        if (mVisibilityProvider.shouldHideDivider(groupIndex, parent)) {
+            return;
+        }
+
         setItemOffsets(rect, groupIndex, parent);
     }
 
