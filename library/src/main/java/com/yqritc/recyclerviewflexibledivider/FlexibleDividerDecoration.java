@@ -12,6 +12,7 @@ import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -155,6 +156,21 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         }
 
         setItemOffsets(rect, groupIndex, parent);
+    }
+
+    /**
+     * Check if recyclerview is reverse layout
+     *
+     * @param parent RecyclerView
+     * @return true if recyclerview is reverse layout
+     */
+    protected boolean isReverseLayout(RecyclerView parent) {
+        RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
+        if (layoutManager instanceof LinearLayoutManager) {
+            return ((LinearLayoutManager) layoutManager).getReverseLayout();
+        } else {
+            return false;
+        }
     }
 
     /**

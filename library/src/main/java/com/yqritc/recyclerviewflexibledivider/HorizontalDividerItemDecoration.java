@@ -32,23 +32,35 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
                 mMarginProvider.dividerRightMargin(position, parent) + transitionX;
 
         int dividerSize = getDividerSize(position, parent);
+        boolean isReverseLayout = isReverseLayout(parent);
         if (mDividerType == DividerType.DRAWABLE) {
             // set top and bottom position of divider
-            if (mPositionInsideItem) {
-                bounds.bottom = child.getBottom() + params.topMargin + transitionY;
+            if (isReverseLayout) {
+                bounds.bottom = child.getTop() - params.topMargin + transitionY;
                 bounds.top = bounds.bottom - dividerSize;
             } else {
-                bounds.top = child.getBottom() + params.topMargin + transitionY;
+                bounds.top = child.getBottom() + params.bottomMargin + transitionY;
                 bounds.bottom = bounds.top + dividerSize;
             }
         } else {
             // set center point of divider
-            if (mPositionInsideItem) {
-                bounds.top = child.getBottom() + params.topMargin - dividerSize / 2 + transitionY;
+            int halfSize = dividerSize / 2;
+            if (isReverseLayout) {
+                bounds.top = child.getTop() - params.topMargin - halfSize + transitionY;
             } else {
-                bounds.top = child.getBottom() + params.topMargin + dividerSize / 2 + transitionY;
+                bounds.top = child.getBottom() + params.bottomMargin + halfSize + transitionY;
             }
             bounds.bottom = bounds.top;
+        }
+
+        if (mPositionInsideItem) {
+            if (isReverseLayout) {
+                bounds.top += dividerSize;
+                bounds.bottom += dividerSize;
+            } else {
+                bounds.top -= dividerSize;
+                bounds.bottom -= dividerSize;
+            }
         }
 
         return bounds;
@@ -58,6 +70,11 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
     protected void setItemOffsets(Rect outRect, int position, RecyclerView parent) {
         if (mPositionInsideItem) {
             outRect.set(0, 0, 0, 0);
+            return;
+        }
+
+        if (isReverseLayout(parent)) {
+            outRect.set(0, getDividerSize(position, parent), 0, 0);
         } else {
             outRect.set(0, 0, 0, getDividerSize(position, parent));
         }
