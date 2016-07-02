@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="define_recyclerview_flexibledivider" />
+    <string name="library_recyclerview_flexibledivider_author">Yoshihito Ikeda</string>
+    <string name="library_recyclerview_flexibledivider_authorWebsite">https://github.com/yqritc</string>
+    <string name="library_recyclerview_flexibledivider_libraryName">RecyclerView-FlexibleDivider</string>
+    <string name="library_recyclerview_flexibledivider_libraryDescription">Android library providing a simple way to control divider items (ItemDecoration) of RecyclerViews</string>
+    <string name="library_recyclerview_flexibledivider_libraryWebsite">https://github.com/yqritc/RecyclerView-FlexibleDivider</string>
+    <string name="library_recyclerview_flexibledivider_libraryVersion">1.4.0</string>
+    <string name="library_recyclerview_flexibledivider_isOpenSource">true</string>
+    <string name="library_recyclerview_flexibledivider_repositoryLink">https://github.com/yqritc/RecyclerView-FlexibleDivider</string>
+    <string name="library_recyclerview_flexibledivider_classPath">com.yqritc.recyclerviewflexibledivider</string>
+    <string name="library_recyclerview_flexibledivider_licenseId">apache_2_0</string>
+</resources>
