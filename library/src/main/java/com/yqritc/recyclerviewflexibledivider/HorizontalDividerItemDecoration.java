@@ -88,6 +88,8 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
         } else if (mDrawableProvider != null) {
             Drawable drawable = mDrawableProvider.drawableProvider(position, parent);
             return drawable.getIntrinsicHeight();
+        } else if (mSpaceProvider != null) {
+            return mSpaceProvider.dividerSize(position, parent);
         }
         throw new RuntimeException("failed to get size");
     }

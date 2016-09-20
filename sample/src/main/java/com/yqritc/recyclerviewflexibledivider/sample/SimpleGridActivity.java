@@ -1,6 +1,7 @@
 package com.yqritc.recyclerviewflexibledivider.sample;
 
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
+import com.yqritc.recyclerviewflexibledivider.VerticalDividerItemDecoration;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -33,6 +34,7 @@ public class SimpleGridActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
+        recyclerView.addItemDecoration(new VerticalDividerItemDecoration.Builder(this).build());
     }
 
 
