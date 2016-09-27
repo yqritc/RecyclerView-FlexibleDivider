@@ -13,6 +13,10 @@ buildscript {
     }
 }
 
+ext {
+    supportLibVersion = '24.2.1'
+}
+
 allprojects {
     repositories {
         jcenter()
