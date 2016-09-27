@@ -7,9 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.Px;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -354,7 +356,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             return (T) this;
         }
 
-        public T color(final int color) {
+        public T color(@ColorInt final int color) {
             return colorProvider(new ColorProvider() {
                 @Override
                 public int dividerColor(int position, RecyclerView parent) {
@@ -390,7 +392,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             return (T) this;
         }
 
-        public T size(final int size) {
+        public T size(@Px final int size) {
             return sizeProvider(new SizeProvider() {
                 @Override
                 public int dividerSize(int position, RecyclerView parent) {

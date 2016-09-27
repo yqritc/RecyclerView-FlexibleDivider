@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DimenRes;
+import android.support.annotation.Px;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -104,6 +105,7 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
          * @param parent   RecyclerView
          * @return top margin
          */
+        @Px
         int dividerTopMargin(int position, RecyclerView parent);
 
         /**
@@ -113,6 +115,7 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
          * @param parent   RecyclerView
          * @return bottom margin
          */
+        @Px
         int dividerBottomMargin(int position, RecyclerView parent);
     }
 
@@ -134,7 +137,7 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
             super(context);
         }
 
-        public Builder margin(final int topMargin, final int bottomMargin) {
+        public Builder margin(@Px final int topMargin, @Px final int bottomMargin) {
             return marginProvider(new MarginProvider() {
                 @Override
                 public int dividerTopMargin(int position, RecyclerView parent) {
@@ -148,7 +151,7 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
             });
         }
 
-        public Builder margin(int verticalMargin) {
+        public Builder margin(@Px int verticalMargin) {
             return margin(verticalMargin, verticalMargin);
         }
 
