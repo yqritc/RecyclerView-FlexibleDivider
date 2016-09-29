@@ -1,26 +1,22 @@
 package com.yqritc.recyclerviewflexibledivider.sample;
 
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
+import com.yqritc.recyclerviewflexibledivider.VerticalDividerItemDecoration;
 
 
-public class PaintActivity extends AppCompatActivity {
+public class SimpleStaggeredGridActivity extends AppCompatActivity {
 
     public static void startActivity(Activity activity) {
-        Intent intent = new Intent(activity, PaintActivity.class);
+        Intent intent = new Intent(activity, SimpleStaggeredGridActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
     }
@@ -30,28 +26,13 @@ public class PaintActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
 
+        SimpleStaggeredAdapter adapter = new SimpleStaggeredAdapter(this);
+        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
-        // Workaround for dash path effect
-        // https://code.google.com/p/android/issues/detail?id=29944
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            recyclerView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        }
-
-        SimpleAdapter adapter = new SimpleAdapter(this);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        manager.setOrientation(OrientationHelper.VERTICAL);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
-
-        Paint paint = new Paint();
-        paint.setStrokeWidth(5);
-        paint.setColor(Color.BLUE);
-        paint.setAntiAlias(true);
-        paint.setPathEffect(new DashPathEffect(new float[]{25.0f, 25.0f}, 0));
-        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
-                .paint(paint)
-                .showLastDivider()
-                .build());
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).margin(40, 40).build());
+        recyclerView.addItemDecoration(new VerticalDividerItemDecoration.Builder(this).margin(40, 40).build());
     }
 
 

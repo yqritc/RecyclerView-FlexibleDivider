@@ -22,4 +22,9 @@
         android:id="@+id/action_simple_grid"
         android:title="@string/menu_simple_grid"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_simple_staggered_grid"
+        android:title="@string/menu_simple_staggered_grid"
+        app:showAsAction="never"/>
 </menu>

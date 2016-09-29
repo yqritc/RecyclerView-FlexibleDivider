@@ -15,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 /**
@@ -113,30 +114,24 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
                 continue;
             }
 
-            if (wasDividerAlreadyDrawn(childPosition, parent, i)) {
-                // No need to draw divider again as it was drawn already by previous column
+            if (mVisibilityProvider.shouldHideDivider(childPosition, parent)) {
                 continue;
             }
 
-            int groupIndex = getGroupIndex(childPosition, parent);
-            if (mVisibilityProvider.shouldHideDivider(groupIndex, parent)) {
-                continue;
-            }
-
-            Rect bounds = getDividerBound(groupIndex, parent, child);
+            Rect bounds = getDividerBound(childPosition, parent, child);
             switch (mDividerType) {
                 case DRAWABLE:
-                    Drawable drawable = mDrawableProvider.drawableProvider(groupIndex, parent);
+                    Drawable drawable = mDrawableProvider.drawableProvider(childPosition, parent);
                     drawable.setBounds(bounds);
                     drawable.draw(c);
                     break;
                 case PAINT:
-                    mPaint = mPaintProvider.dividerPaint(groupIndex, parent);
+                    mPaint = mPaintProvider.dividerPaint(childPosition, parent);
                     c.drawLine(bounds.left, bounds.top, bounds.right, bounds.bottom, mPaint);
                     break;
                 case COLOR:
-                    mPaint.setColor(mColorProvider.dividerColor(groupIndex, parent));
-                    mPaint.setStrokeWidth(mSizeProvider.dividerSize(groupIndex, parent));
+                    mPaint.setColor(mColorProvider.dividerColor(childPosition, parent));
+                    mPaint.setStrokeWidth(mSizeProvider.dividerSize(childPosition, parent));
                     c.drawLine(bounds.left, bounds.top, bounds.right, bounds.bottom, mPaint);
                     break;
                 case SPACE:
@@ -153,43 +148,157 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
      */
     public boolean hasDivider(RecyclerView parent, int childPosition)
     {
+        if (mShowLastDivider) {
+            return true;
+        } else if (this instanceof VerticalDividerItemDecoration) {
+            return hasVerticalDivider(parent, childPosition);
+        } else if (this instanceof HorizontalDividerItemDecoration) {
+            return hasHorizontalDivider(parent, childPosition);
+        }
+        return false;
+    }
+
+    private boolean hasVerticalDivider(RecyclerView parent, int position)
+    {
         RecyclerView.Adapter adapter = parent.getAdapter();
         int itemCount = adapter.getItemCount();
         int lastDividerOffset = getLastDividerOffset(parent);
 
-        if (!mShowLastDivider && this instanceof VerticalDividerItemDecoration
-                && parent.getLayoutManager() instanceof GridLayoutManager) {
+
+        if (parent.getLayoutManager() instanceof GridLayoutManager)
+        {
             GridLayoutManager manager = (GridLayoutManager)parent.getLayoutManager();
             int spanCount = manager.getSpanCount();
 
-            GridLayoutManager.SpanSizeLookup spanSizeLookup = manager.getSpanSizeLookup();
             if (manager.getOrientation() == OrientationHelper.VERTICAL)
             {
-                return spanSizeLookup.getSpanIndex(childPosition, spanCount) != spanCount - 1;
+                return positionTotalSpanSize(manager, position) != spanCount;
             }
             else
             {
-                return childPosition < itemCount - lastDividerOffset;
+                return position < itemCount - lastDividerOffset;
             }
-        } else if (!mShowLastDivider && this instanceof HorizontalDividerItemDecoration
-                && parent.getLayoutManager() instanceof GridLayoutManager) {
-            GridLayoutManager manager = (GridLayoutManager)parent.getLayoutManager();
-            int spanCount = manager.getSpanCount();
-
-            GridLayoutManager.SpanSizeLookup spanSizeLookup = manager.getSpanSizeLookup();
-            if (manager.getOrientation() == OrientationHelper.VERTICAL)
-            {
-                return childPosition < itemCount - lastDividerOffset;
-            }
-            else
-            {
-                return spanSizeLookup.getSpanIndex(childPosition, spanCount) != spanCount - 1;
-            }
-        } else if (!mShowLastDivider && childPosition >= itemCount - lastDividerOffset) {
-            // Don't draw divider for last line if mShowLastDivider = false
-            return false;
         }
-        return true;
+        else if (parent.getLayoutManager() instanceof StaggeredGridLayoutManager)
+        {
+            StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager)parent.getLayoutManager();
+            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams)manager.findViewByPosition(position).getLayoutParams();
+            int spanCount = manager.getSpanCount();
+            int spanIndex= params.getSpanIndex();
+
+            if (manager.getOrientation() == OrientationHelper.VERTICAL)
+            {
+                return spanIndex < spanCount - 1;
+            }
+            else
+            {
+                int[] lastPosition = manager.findLastVisibleItemPositions(null);
+
+                boolean hasRight = false;
+                for(int p : lastPosition)
+                {
+                    if (p != position && p != -1)
+                    {
+                        StaggeredGridLayoutManager.LayoutParams params1 = (StaggeredGridLayoutManager.LayoutParams)manager.findViewByPosition(p).getLayoutParams();
+                        if (params1.getSpanIndex() == spanIndex)
+                        {
+                            hasRight = true;
+                            break;
+                        }
+                    }
+                }
+                return hasRight;
+            }
+        }
+        else if (parent.getLayoutManager() instanceof LinearLayoutManager)
+        {
+            return position < itemCount - 1;
+        }
+        return false;
+    }
+
+    private boolean hasHorizontalDivider(RecyclerView parent, int position)
+    {
+        RecyclerView.Adapter adapter = parent.getAdapter();
+        int itemCount = adapter.getItemCount();
+        int lastDividerOffset = getLastDividerOffset(parent);
+
+        if (parent.getLayoutManager() instanceof GridLayoutManager)
+        {
+            GridLayoutManager manager = (GridLayoutManager)parent.getLayoutManager();
+            int spanCount = manager.getSpanCount();
+
+            if (manager.getOrientation() == OrientationHelper.VERTICAL) // 最后一行没有
+            {
+                return position < itemCount - lastDividerOffset;
+            }
+            else
+            {
+                return positionTotalSpanSize(manager, position) != spanCount;
+            }
+        }
+        else if (parent.getLayoutManager() instanceof StaggeredGridLayoutManager)
+        {
+            StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager)parent.getLayoutManager();
+            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams)manager.findViewByPosition(position).getLayoutParams();
+            int spanCount = manager.getSpanCount();
+            int spanIndex= params.getSpanIndex();
+
+            if (manager.getOrientation() == OrientationHelper.VERTICAL)
+            {
+                int[] lastPosition = manager.findLastVisibleItemPositions(null);
+
+                boolean hasBottom = false;
+                for(int p : lastPosition)
+                {
+                    if (p != position && p != -1)
+                    {
+                        StaggeredGridLayoutManager.LayoutParams params1 = (StaggeredGridLayoutManager.LayoutParams)manager.findViewByPosition(p).getLayoutParams();
+                        if (params1.getSpanIndex() == spanIndex)
+                        {
+                            hasBottom = true;
+                            break;
+                        }
+                    }
+                }
+                return hasBottom;
+            }
+            else
+            {
+                return spanIndex  < spanCount - 1;
+            }
+        }
+        else if (parent.getLayoutManager() instanceof LinearLayoutManager)
+        {
+            return position < itemCount - 1;
+        }
+        return false;
+    }
+
+    /**
+     * @param manager
+     * @param position
+     * @return
+     */
+    protected int positionTotalSpanSize(GridLayoutManager manager, int position)
+    {
+        int totalSpanSize = 0;
+        GridLayoutManager.SpanSizeLookup spanSizeLookup = manager.getSpanSizeLookup();
+        int spanCount = manager.getSpanCount();
+        int groupIndex = spanSizeLookup.getSpanGroupIndex(position, spanCount);
+        for (int i = position; i >= 0; i--)
+        {
+            int thisGroupIndex = spanSizeLookup.getSpanGroupIndex(i, spanCount);
+            if (thisGroupIndex == groupIndex)
+            {
+                totalSpanSize += spanSizeLookup.getSpanSize(i);
+            }
+            else
+            {
+                break;
+            }
+        }
+        return totalSpanSize;
     }
 
     @Override
@@ -200,12 +309,11 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             return;
         }
 
-        int groupIndex = getGroupIndex(position, parent);
-        if (mVisibilityProvider.shouldHideDivider(groupIndex, parent)) {
+        if (mVisibilityProvider.shouldHideDivider(position, parent)) {
             return;
         }
 
-        setItemOffsets(rect, groupIndex, parent);
+        setItemOffsets(rect, position, parent);
     }
 
     /**
@@ -248,65 +356,6 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         }
 
         return 1;
-    }
-
-    /**
-     * Determines whether divider was already drawn for the row the item is in,
-     * effectively only makes sense for a grid
-     *
-     * @param position current view position to draw divider
-     * @param parent   RecyclerView
-     * @return true if the divider can be skipped as it is in the same row as the previous one.
-     */
-    private boolean wasDividerAlreadyDrawn(int position, RecyclerView parent, int visibleIndex) {
-        if (parent.getLayoutManager() instanceof GridLayoutManager) {
-            GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
-            GridLayoutManager.SpanSizeLookup spanSizeLookup = layoutManager.getSpanSizeLookup();
-            int spanCount = layoutManager.getSpanCount();
-            if (this instanceof HorizontalDividerItemDecoration)
-            {
-                if (layoutManager.getOrientation() == OrientationHelper.VERTICAL)
-                {
-                    return spanSizeLookup.getSpanIndex(position, spanCount) > 0;
-                }
-                else
-                {
-                    return visibleIndex >= spanCount;
-                }
-            }
-            else if (this instanceof VerticalDividerItemDecoration)
-            {
-                if (layoutManager.getOrientation() == OrientationHelper.VERTICAL)
-                {
-                    return visibleIndex >= spanCount;
-                }
-                else
-                {
-                    return spanSizeLookup.getSpanIndex(position, spanCount) > 0;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns a group index for GridLayoutManager.
-     * for LinearLayoutManager, always returns position.
-     *
-     * @param position current view position to draw divider
-     * @param parent   RecyclerView
-     * @return group index of items
-     */
-    private int getGroupIndex(int position, RecyclerView parent) {
-        if (parent.getLayoutManager() instanceof GridLayoutManager) {
-            GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
-            GridLayoutManager.SpanSizeLookup spanSizeLookup = layoutManager.getSpanSizeLookup();
-            int spanCount = layoutManager.getSpanCount();
-            return spanSizeLookup.getSpanGroupIndex(position, spanCount);
-        }
-
-        return position;
     }
 
     protected abstract Rect getDividerBound(int position, RecyclerView parent, View child);

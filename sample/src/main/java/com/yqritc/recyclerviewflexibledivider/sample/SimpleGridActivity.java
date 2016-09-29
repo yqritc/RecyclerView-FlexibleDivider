@@ -30,11 +30,17 @@ public class SimpleGridActivity extends AppCompatActivity {
         SimpleAdapter adapter = new SimpleAdapter(this);
         GridLayoutManager manager = new GridLayoutManager(this, 3);
         manager.setOrientation(OrientationHelper.VERTICAL);
+//        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+//            @Override
+//            public int getSpanSize(int position) {
+//                return 3 - position % 3;
+//            }
+//        });
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
-        recyclerView.addItemDecoration(new VerticalDividerItemDecoration.Builder(this).build());
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).margin(40, 40).build());
+        recyclerView.addItemDecoration(new VerticalDividerItemDecoration.Builder(this).margin(40, 40).build());
     }
 
 
@@ -61,6 +67,9 @@ public class SimpleGridActivity extends AppCompatActivity {
                 return true;
             case R.id.action_simple_grid:
                 SimpleGridActivity.startActivity(this);
+                return true;
+            case R.id.action_simple_staggered_grid:
+                SimpleStaggeredGridActivity.startActivity(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
