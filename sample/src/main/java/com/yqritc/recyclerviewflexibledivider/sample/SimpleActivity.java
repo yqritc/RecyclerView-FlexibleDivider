@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 import com.yqritc.recyclerviewflexibledivider.VerticalDividerItemDecoration;
 
 
@@ -28,11 +29,12 @@ public class SimpleActivity extends AppCompatActivity {
 
         SimpleAdapter adapter = new SimpleAdapter(this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        manager.setOrientation(OrientationHelper.HORIZONTAL);
+        manager.setOrientation(OrientationHelper.VERTICAL);
+        manager.setReverseLayout(true);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new VerticalDividerItemDecoration.Builder(this).build());
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
     }
 
 

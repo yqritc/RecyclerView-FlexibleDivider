@@ -33,7 +33,6 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
         bounds.bottom = child.getBottom() + transitionY;
 
         int dividerSize = getDividerSize(position, parent);
-        boolean isReverseLayout = isReverseLayout(parent);
         if (mDividerType == DividerType.DRAWABLE || mDividerType == DividerType.SPACE) {
             if (alignTopEdge(parent, position)) {
                 bounds.top += mMarginProvider.dividerTopMargin(position, parent);
@@ -42,33 +41,18 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
                 bounds.bottom -= mMarginProvider.dividerBottomMargin(position, parent);
             }
 
-            // set left and right position of divider
-            if (isReverseLayout) {
-                bounds.right = child.getLeft() - params.leftMargin + transitionX;
-                bounds.left = bounds.right - dividerSize;
-            } else {
-                bounds.left = child.getRight() + params.rightMargin + transitionX;
-                bounds.right = bounds.left + dividerSize;
-            }
+            bounds.left = child.getRight() + params.rightMargin + transitionX;
+            bounds.right = bounds.left + dividerSize;
         } else {
             // set center point of divider
             int halfSize = dividerSize / 2;
-            if (isReverseLayout) {
-                bounds.left = child.getLeft() - params.leftMargin - halfSize + transitionX;
-            } else {
-                bounds.left = child.getRight() + params.rightMargin + halfSize + transitionX;
-            }
+            bounds.left = child.getRight() + params.rightMargin + halfSize + transitionX;
             bounds.right = bounds.left;
         }
 
         if (mPositionInsideItem) {
-            if (isReverseLayout) {
-                bounds.left += dividerSize;
-                bounds.right += dividerSize;
-            } else {
-                bounds.left -= dividerSize;
-                bounds.right -= dividerSize;
-            }
+            bounds.left -= dividerSize;
+            bounds.right -= dividerSize;
         }
 
         return bounds;
@@ -83,27 +67,48 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
             int spanCount = manager.getSpanCount();
             if (manager.getOrientation() == GridLayoutManager.VERTICAL) // 垂直布局
             {
-                if (lookup.getSpanGroupIndex(position, spanCount) == 0) // 第一行
-                {
-                    return true;
+                if (manager.getReverseLayout()) {
+                    if (lookup.getSpanGroupIndex(position, spanCount) ==
+                            lookup.getSpanGroupIndex(parent.getAdapter().getItemCount() - 1, spanCount)) // 第一行
+                    {
+                        return true;
+                    }
+                } else {
+                    if (lookup.getSpanGroupIndex(position, spanCount) == 0) // 第一行
+                    {
+                        return true;
+                    }
                 }
-            }
-            else // 水平布局
+            } else // 水平布局
             {
-                if (lookup.getSpanIndex(position, spanCount) == 0) {
-                    return true;
-                }
+                return lookup.getSpanIndex(position, spanCount) == 0;
             }
         } else if (layoutManager instanceof StaggeredGridLayoutManager) {
             StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) layoutManager;
-            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams)manager.findViewByPosition(position).getLayoutParams();
+            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) manager.findViewByPosition(position).getLayoutParams();
             int spanCount = manager.getSpanCount();
+            int spanIndex = params.getSpanIndex();
 
             if (manager.getOrientation() == StaggeredGridLayoutManager.VERTICAL) // 垂直布局
             {
-                return position < spanCount;
-            }
-            else // 水平布局
+                if (manager.getReverseLayout()) {
+                    int[] lastPosition = manager.findLastVisibleItemPositions(null);
+
+                    boolean hasTop = false;
+                    for (int p : lastPosition) {
+                        if (p != position && p != -1) {
+                            StaggeredGridLayoutManager.LayoutParams params1 = (StaggeredGridLayoutManager.LayoutParams) manager.findViewByPosition(p).getLayoutParams();
+                            if (params1.getSpanIndex() == spanIndex) {
+                                hasTop = true;
+                                break;
+                            }
+                        }
+                    }
+                    return !hasTop;
+                } else {
+                    return position < spanCount;
+                }
+            } else // 水平布局
             {
                 return params.getSpanIndex() == 0;
             }
@@ -123,48 +128,50 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
             int itemCount = parent.getAdapter().getItemCount();
             if (manager.getOrientation() == GridLayoutManager.VERTICAL) // 垂直布局
             {
-                int lastRowFirstPosition = 0;
-                for (int i = itemCount - 1; i >= 0; i--) {
-                    if (lookup.getSpanIndex(i, spanCount) == 0) {
-                        lastRowFirstPosition = i;
-                        break;
+                if (manager.getReverseLayout()) {
+                    return lookup.getSpanGroupIndex(position, spanCount) == 0;
+                } else {
+                    int lastRowFirstPosition = 0;
+                    for (int i = itemCount - 1; i >= 0; i--) {
+                        if (lookup.getSpanIndex(i, spanCount) == 0) {
+                            lastRowFirstPosition = i;
+                            break;
+                        }
                     }
-                }
-                if (position >= lastRowFirstPosition) {
-                    return true;
+                    if (position >= lastRowFirstPosition) {
+                        return true;
+                    }
                 }
             } else // 水平布局
             {
-                if (positionTotalSpanSize(manager, position) == spanCount) {
-                    return true;
-                }
+                return positionTotalSpanSize(manager, position) == spanCount;
             }
         } else if (layoutManager instanceof StaggeredGridLayoutManager) {
             StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) layoutManager;
-            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams)manager.findViewByPosition(position).getLayoutParams();
+            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) manager.findViewByPosition(position).getLayoutParams();
             int spanCount = manager.getSpanCount();
             int spanIndex = params.getSpanIndex();
 
             if (manager.getOrientation() == StaggeredGridLayoutManager.VERTICAL) // 垂直布局
             {
-                int[] lastPosition = manager.findLastVisibleItemPositions(null);
+                if (manager.getReverseLayout()) {
+                    return position < spanCount;
+                } else {
+                    int[] lastPosition = manager.findLastVisibleItemPositions(null);
 
-                boolean hasBottom = false;
-                for(int p : lastPosition)
-                {
-                    if (p != position && p != -1)
-                    {
-                        StaggeredGridLayoutManager.LayoutParams params1 = (StaggeredGridLayoutManager.LayoutParams)manager.findViewByPosition(p).getLayoutParams();
-                        if (params1.getSpanIndex() == spanIndex)
-                        {
-                            hasBottom = true;
-                            break;
+                    boolean hasBottom = false;
+                    for (int p : lastPosition) {
+                        if (p != position && p != -1) {
+                            StaggeredGridLayoutManager.LayoutParams params1 = (StaggeredGridLayoutManager.LayoutParams) manager.findViewByPosition(p).getLayoutParams();
+                            if (params1.getSpanIndex() == spanIndex) {
+                                hasBottom = true;
+                                break;
+                            }
                         }
                     }
+                    return !hasBottom;
                 }
-                return !hasBottom;
-            }
-            else // 水平布局
+            } else // 水平布局
             {
                 return spanIndex == spanCount - 1;
             }
@@ -180,12 +187,7 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
             outRect.set(0, 0, 0, 0);
             return;
         }
-
-        if (isReverseLayout(parent)) {
-            outRect.set(getDividerSize(position, parent), 0, 0, 0);
-        } else {
-            outRect.set(0, 0, getDividerSize(position, parent), 0);
-        }
+        outRect.set(0, 0, getDividerSize(position, parent), 0);
     }
 
     private int getDividerSize(int position, RecyclerView parent) {

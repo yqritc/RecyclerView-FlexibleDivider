@@ -30,6 +30,7 @@ public class SimpleGridActivity extends AppCompatActivity {
         SimpleAdapter adapter = new SimpleAdapter(this);
         GridLayoutManager manager = new GridLayoutManager(this, 3);
         manager.setOrientation(OrientationHelper.VERTICAL);
+        manager.setReverseLayout(true);
 //        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 //            @Override
 //            public int getSpanSize(int position) {

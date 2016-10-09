@@ -98,19 +98,11 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         }
 
         int validChildCount = parent.getChildCount();
-        int lastChildPosition = -1;
         for (int i = 0; i < validChildCount; i++) {
             View child = parent.getChildAt(i);
             int childPosition = parent.getChildAdapterPosition(child);
 
-            if (childPosition < lastChildPosition) {
-                // Avoid remaining divider when animation starts
-                continue;
-            }
-            lastChildPosition = childPosition;
-
-            if (!hasDivider(parent, childPosition))
-            {
+            if (!hasDivider(parent, childPosition)) {
                 continue;
             }
 
@@ -142,12 +134,12 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
     /**
      * Whether child has divider
+     *
      * @param parent
      * @param childPosition
      * @return true if child has divider
      */
-    public boolean hasDivider(RecyclerView parent, int childPosition)
-    {
+    public boolean hasDivider(RecyclerView parent, int childPosition) {
         if (mShowLastDivider) {
             return true;
         } else if (this instanceof VerticalDividerItemDecoration) {
@@ -158,119 +150,118 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         return false;
     }
 
-    private boolean hasVerticalDivider(RecyclerView parent, int position)
-    {
+    private boolean hasVerticalDivider(RecyclerView parent, int position) {
         RecyclerView.Adapter adapter = parent.getAdapter();
         int itemCount = adapter.getItemCount();
         int lastDividerOffset = getLastDividerOffset(parent);
 
 
-        if (parent.getLayoutManager() instanceof GridLayoutManager)
-        {
-            GridLayoutManager manager = (GridLayoutManager)parent.getLayoutManager();
+        if (parent.getLayoutManager() instanceof GridLayoutManager) {
+            GridLayoutManager manager = (GridLayoutManager) parent.getLayoutManager();
             int spanCount = manager.getSpanCount();
 
-            if (manager.getOrientation() == OrientationHelper.VERTICAL)
-            {
+            if (manager.getOrientation() == OrientationHelper.VERTICAL) {
                 return positionTotalSpanSize(manager, position) != spanCount;
+            } else {
+                if (manager.getReverseLayout()) {
+                    return manager.getSpanSizeLookup().getSpanGroupIndex(position, spanCount) != 0;
+                } else {
+                    return position < itemCount - lastDividerOffset;
+                }
             }
-            else
-            {
-                return position < itemCount - lastDividerOffset;
-            }
-        }
-        else if (parent.getLayoutManager() instanceof StaggeredGridLayoutManager)
-        {
-            StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager)parent.getLayoutManager();
-            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams)manager.findViewByPosition(position).getLayoutParams();
+        } else if (parent.getLayoutManager() instanceof StaggeredGridLayoutManager) {
+            StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) parent.getLayoutManager();
+            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) manager.findViewByPosition(position).getLayoutParams();
             int spanCount = manager.getSpanCount();
-            int spanIndex= params.getSpanIndex();
+            int spanIndex = params.getSpanIndex();
 
-            if (manager.getOrientation() == OrientationHelper.VERTICAL)
-            {
+            if (manager.getOrientation() == OrientationHelper.VERTICAL) {
                 return spanIndex < spanCount - 1;
-            }
-            else
-            {
-                int[] lastPosition = manager.findLastVisibleItemPositions(null);
-
-                boolean hasRight = false;
-                for(int p : lastPosition)
+            } else {
+                int[] lastPosition = null;
+                if (manager.getReverseLayout())
                 {
-                    if (p != position && p != -1)
-                    {
-                        StaggeredGridLayoutManager.LayoutParams params1 = (StaggeredGridLayoutManager.LayoutParams)manager.findViewByPosition(p).getLayoutParams();
-                        if (params1.getSpanIndex() == spanIndex)
-                        {
-                            hasRight = true;
+                    lastPosition = manager.findFirstVisibleItemPositions(null);
+                }
+                else
+                {
+                    lastPosition = manager.findLastVisibleItemPositions(null);
+                }
+                boolean hasDirectionAlign = false;
+                for (int p : lastPosition) {
+                    if (p != position && p != -1) {
+                        StaggeredGridLayoutManager.LayoutParams params1 = (StaggeredGridLayoutManager.LayoutParams) manager.findViewByPosition(p).getLayoutParams();
+                        if (params1.getSpanIndex() == spanIndex) {
+                            hasDirectionAlign = true;
                             break;
                         }
                     }
                 }
-                return hasRight;
+                return hasDirectionAlign;
             }
-        }
-        else if (parent.getLayoutManager() instanceof LinearLayoutManager)
-        {
-            return position < itemCount - 1;
+        } else if (parent.getLayoutManager() instanceof LinearLayoutManager) {
+            if (((LinearLayoutManager) parent.getLayoutManager()).getReverseLayout()) {
+                return position > 0;
+            } else {
+                return position < itemCount - 1;
+            }
         }
         return false;
     }
 
-    private boolean hasHorizontalDivider(RecyclerView parent, int position)
-    {
+    private boolean hasHorizontalDivider(RecyclerView parent, int position) {
         RecyclerView.Adapter adapter = parent.getAdapter();
         int itemCount = adapter.getItemCount();
         int lastDividerOffset = getLastDividerOffset(parent);
 
-        if (parent.getLayoutManager() instanceof GridLayoutManager)
-        {
-            GridLayoutManager manager = (GridLayoutManager)parent.getLayoutManager();
+        if (parent.getLayoutManager() instanceof GridLayoutManager) {
+            GridLayoutManager manager = (GridLayoutManager) parent.getLayoutManager();
             int spanCount = manager.getSpanCount();
 
             if (manager.getOrientation() == OrientationHelper.VERTICAL) // 最后一行没有
             {
-                return position < itemCount - lastDividerOffset;
-            }
-            else
-            {
+                if (manager.getReverseLayout()) {
+                    GridLayoutManager.SpanSizeLookup lookup = manager.getSpanSizeLookup();
+                    return lookup.getSpanGroupIndex(position, spanCount) != 0;
+                } else {
+                    return position < itemCount - lastDividerOffset;
+                }
+            } else {
                 return positionTotalSpanSize(manager, position) != spanCount;
             }
-        }
-        else if (parent.getLayoutManager() instanceof StaggeredGridLayoutManager)
-        {
-            StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager)parent.getLayoutManager();
-            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams)manager.findViewByPosition(position).getLayoutParams();
+        } else if (parent.getLayoutManager() instanceof StaggeredGridLayoutManager) {
+            StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) parent.getLayoutManager();
+            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) manager.findViewByPosition(position).getLayoutParams();
             int spanCount = manager.getSpanCount();
-            int spanIndex= params.getSpanIndex();
+            int spanIndex = params.getSpanIndex();
 
-            if (manager.getOrientation() == OrientationHelper.VERTICAL)
-            {
-                int[] lastPosition = manager.findLastVisibleItemPositions(null);
+            if (manager.getOrientation() == OrientationHelper.VERTICAL) {
+                if (manager.getReverseLayout()) {
+                    return position > spanCount - 1;
+                } else {
+                    int[] lastPosition = manager.findLastVisibleItemPositions(null);
 
-                boolean hasBottom = false;
-                for(int p : lastPosition)
-                {
-                    if (p != position && p != -1)
-                    {
-                        StaggeredGridLayoutManager.LayoutParams params1 = (StaggeredGridLayoutManager.LayoutParams)manager.findViewByPosition(p).getLayoutParams();
-                        if (params1.getSpanIndex() == spanIndex)
-                        {
-                            hasBottom = true;
-                            break;
+                    boolean hasBottom = false;
+                    for (int p : lastPosition) {
+                        if (p != position && p != -1) {
+                            StaggeredGridLayoutManager.LayoutParams params1 = (StaggeredGridLayoutManager.LayoutParams) manager.findViewByPosition(p).getLayoutParams();
+                            if (params1.getSpanIndex() == spanIndex) {
+                                hasBottom = true;
+                                break;
+                            }
                         }
                     }
+                    return hasBottom;
                 }
-                return hasBottom;
+            } else {
+                return spanIndex < spanCount - 1;
             }
-            else
-            {
-                return spanIndex  < spanCount - 1;
+        } else if (parent.getLayoutManager() instanceof LinearLayoutManager) {
+            if (((LinearLayoutManager) parent.getLayoutManager()).getReverseLayout()) {
+                return position > 0;
+            } else {
+                return position < itemCount - 1;
             }
-        }
-        else if (parent.getLayoutManager() instanceof LinearLayoutManager)
-        {
-            return position < itemCount - 1;
         }
         return false;
     }
@@ -280,21 +271,16 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
      * @param position
      * @return
      */
-    protected int positionTotalSpanSize(GridLayoutManager manager, int position)
-    {
+    protected int positionTotalSpanSize(GridLayoutManager manager, int position) {
         int totalSpanSize = 0;
         GridLayoutManager.SpanSizeLookup spanSizeLookup = manager.getSpanSizeLookup();
         int spanCount = manager.getSpanCount();
         int groupIndex = spanSizeLookup.getSpanGroupIndex(position, spanCount);
-        for (int i = position; i >= 0; i--)
-        {
+        for (int i = position; i >= 0; i--) {
             int thisGroupIndex = spanSizeLookup.getSpanGroupIndex(i, spanCount);
-            if (thisGroupIndex == groupIndex)
-            {
+            if (thisGroupIndex == groupIndex) {
                 totalSpanSize += spanSizeLookup.getSpanSize(i);
-            }
-            else
-            {
+            } else {
                 break;
             }
         }
@@ -304,8 +290,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     @Override
     public void getItemOffsets(Rect rect, View v, RecyclerView parent, RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(v);
-        if (!hasDivider(parent, position))
-        {
+        if (!hasDivider(parent, position)) {
             return;
         }
 

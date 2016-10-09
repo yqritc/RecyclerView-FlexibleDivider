@@ -1,6 +1,8 @@
 package com.yqritc.recyclerviewflexibledivider.sample;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -24,7 +26,15 @@ public class SimpleStaggeredAdapter extends RecyclerView.Adapter<SimpleStaggered
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         recyclerView = (RecyclerView)parent;
-        View view = mLayoutInflater.inflate(R.layout.layout_sample_item, parent, false);
+
+        int rId = R.layout.layout_sample_item;
+        StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager)((RecyclerView)parent).getLayoutManager();
+        if (manager.getOrientation() == StaggeredGridLayoutManager.HORIZONTAL)
+        {
+            rId = R.layout.layout_sample_item2;
+        }
+
+        View view = mLayoutInflater.inflate(rId, parent, false);
         return new ViewHolder(view);
     }
 
@@ -37,11 +47,9 @@ public class SimpleStaggeredAdapter extends RecyclerView.Adapter<SimpleStaggered
         if (manager.getOrientation() == StaggeredGridLayoutManager.HORIZONTAL)
         {
             params.width = (200 + (position % 3) * 30);
-            params.height = StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT;
         }
         else
         {
-            params.width = StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT;
             params.height = (200 + (position % 3) * 30);
         }
         holder.mSampleText.setLayoutParams(params);

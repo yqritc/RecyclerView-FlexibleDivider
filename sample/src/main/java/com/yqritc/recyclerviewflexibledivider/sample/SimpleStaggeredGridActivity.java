@@ -27,8 +27,9 @@ public class SimpleStaggeredGridActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sample);
 
         SimpleStaggeredAdapter adapter = new SimpleStaggeredAdapter(this);
-        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.HORIZONTAL);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
+        manager.setReverseLayout(true);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).margin(40, 40).build());

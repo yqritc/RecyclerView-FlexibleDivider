@@ -1,6 +1,8 @@
 package com.yqritc.recyclerviewflexibledivider.sample;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +23,24 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.layout_sample_item, parent, false);
+        int rId = R.layout.layout_sample_item;
+        if (((RecyclerView)parent).getLayoutManager() instanceof LinearLayoutManager)
+        {
+            LinearLayoutManager manager = (LinearLayoutManager)((RecyclerView)parent).getLayoutManager();
+            if (manager.getOrientation() == LinearLayoutManager.HORIZONTAL)
+            {
+                rId = R.layout.layout_sample_item2;
+            }
+        }
+        else if (((RecyclerView)parent).getLayoutManager() instanceof GridLayoutManager)
+        {
+            GridLayoutManager manager = (GridLayoutManager)((RecyclerView)parent).getLayoutManager();
+            if (manager.getOrientation() == GridLayoutManager.HORIZONTAL)
+            {
+                rId = R.layout.layout_sample_item2;
+            }
+        }
+        View view = mLayoutInflater.inflate(rId, parent, false);
         return new ViewHolder(view);
     }
 
