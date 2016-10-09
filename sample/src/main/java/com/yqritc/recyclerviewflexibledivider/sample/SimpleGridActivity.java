@@ -30,13 +30,12 @@ public class SimpleGridActivity extends AppCompatActivity {
         SimpleAdapter adapter = new SimpleAdapter(this);
         GridLayoutManager manager = new GridLayoutManager(this, 3);
         manager.setOrientation(OrientationHelper.VERTICAL);
-        manager.setReverseLayout(true);
-//        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-//            @Override
-//            public int getSpanSize(int position) {
-//                return 3 - position % 3;
-//            }
-//        });
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return 3 - position % 3;
+            }
+        });
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);

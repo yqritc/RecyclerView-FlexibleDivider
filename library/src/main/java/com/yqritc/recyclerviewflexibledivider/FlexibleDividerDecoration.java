@@ -302,21 +302,6 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     }
 
     /**
-     * Check if recyclerview is reverse layout
-     *
-     * @param parent RecyclerView
-     * @return true if recyclerview is reverse layout
-     */
-    protected boolean isReverseLayout(RecyclerView parent) {
-        RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
-        if (layoutManager instanceof LinearLayoutManager) {
-            return ((LinearLayoutManager) layoutManager).getReverseLayout();
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * In the case mShowLastDivider = false,
      * Returns offset for how many views we don't have to draw a divider for,
      * for LinearLayoutManager it is as simple as not drawing the last child divider,
