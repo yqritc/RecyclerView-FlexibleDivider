@@ -149,6 +149,9 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             // Don't set item offset for last line if mShowLastDivider = false
             return;
         }
+        if (mVisibilityProvider.shouldHideDivider(position, parent)) {
+            return;
+        }
 
         int groupIndex = getGroupIndex(position, parent);
         if (mVisibilityProvider.shouldHideDivider(groupIndex, parent)) {
