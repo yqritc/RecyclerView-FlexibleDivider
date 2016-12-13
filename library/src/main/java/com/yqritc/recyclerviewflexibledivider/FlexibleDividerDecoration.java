@@ -86,6 +86,19 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+        if (!mPositionInsideItem) {
+            onDrawImpl(c, parent, state);
+        }
+    }
+
+    @Override
+    public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+        if (mPositionInsideItem) {
+            onDrawImpl(c, parent, state);
+        }
+    }
+
+    private void onDrawImpl(Canvas c, RecyclerView parent, RecyclerView.State state) {
         RecyclerView.Adapter adapter = parent.getAdapter();
         if (adapter == null) {
             return;
