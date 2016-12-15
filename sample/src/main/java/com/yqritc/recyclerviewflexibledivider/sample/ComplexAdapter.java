@@ -105,7 +105,7 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
 //    }
 
     @Override
-    public boolean shouldHideDivider(int position, RecyclerView parent) {
+    public boolean shouldHideDivider(int position,int viewtype, RecyclerView parent) {
         if (position == 14 || position == 15) {
             return true;
         }

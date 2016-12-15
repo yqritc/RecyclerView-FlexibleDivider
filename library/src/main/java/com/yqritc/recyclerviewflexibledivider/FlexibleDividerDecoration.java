@@ -25,11 +25,6 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider
     };
-
-    protected enum DividerType {
-        DRAWABLE, PAINT, COLOR
-    }
-
     protected DividerType mDividerType = DividerType.DRAWABLE;
     protected VisibilityProvider mVisibilityProvider;
     protected PaintProvider mPaintProvider;
@@ -112,7 +107,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             View child = parent.getChildAt(i);
             int childPosition = parent.getChildAdapterPosition(child);
 
-            if (childPosition < lastChildPosition) {
+            if (childPosition < 0 || childPosition < lastChildPosition) {
                 // Avoid remaining divider when animation starts
                 continue;
             }
@@ -129,7 +124,8 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             }
 
             int groupIndex = getGroupIndex(childPosition, parent);
-            if (mVisibilityProvider.shouldHideDivider(groupIndex, parent)) {
+            int viewType = adapter.getItemViewType(childPosition);
+            if (mVisibilityProvider.shouldHideDivider(groupIndex, viewType, parent)) {
                 continue;
             }
 
@@ -155,16 +151,18 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
     @Override
     public void getItemOffsets(Rect rect, View v, RecyclerView parent, RecyclerView.State state) {
+        RecyclerView.Adapter adapter = parent.getAdapter();
         int position = parent.getChildAdapterPosition(v);
-        int itemCount = parent.getAdapter().getItemCount();
+        int itemCount = adapter.getItemCount();
         int lastDividerOffset = getLastDividerOffset(parent);
-        if (!mShowLastDivider && position >= itemCount - lastDividerOffset) {
+        if (position < 0 || (!mShowLastDivider && position >= itemCount - lastDividerOffset)) {
             // Don't set item offset for last line if mShowLastDivider = false
             return;
         }
 
         int groupIndex = getGroupIndex(position, parent);
-        if (mVisibilityProvider.shouldHideDivider(groupIndex, parent)) {
+        int viewType = adapter.getItemViewType(groupIndex);
+        if (mVisibilityProvider.shouldHideDivider(groupIndex, viewType, parent)) {
             return;
         }
 
@@ -255,6 +253,10 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
     protected abstract void setItemOffsets(Rect outRect, int position, RecyclerView parent);
 
+    protected enum DividerType {
+        DRAWABLE, PAINT, COLOR
+    }
+
     /**
      * Interface for controlling divider visibility
      */
@@ -264,10 +266,11 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
          * Returns true if divider should be hidden.
          *
          * @param position Divider position (or group index for GridLayoutManager)
+         * @param viewType Item view type
          * @param parent   RecyclerView
          * @return True if the divider at position should be hidden
          */
-        boolean shouldHideDivider(int position, RecyclerView parent);
+        boolean shouldHideDivider(int position, int viewType, RecyclerView parent);
     }
 
     /**
@@ -333,15 +336,15 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
     public static class Builder<T extends Builder> {
 
-        private Context mContext;
         protected Resources mResources;
+        private Context mContext;
         private PaintProvider mPaintProvider;
         private ColorProvider mColorProvider;
         private DrawableProvider mDrawableProvider;
         private SizeProvider mSizeProvider;
         private VisibilityProvider mVisibilityProvider = new VisibilityProvider() {
             @Override
-            public boolean shouldHideDivider(int position, RecyclerView parent) {
+            public boolean shouldHideDivider(int position, int viewType, RecyclerView parent) {
                 return false;
             }
         };
