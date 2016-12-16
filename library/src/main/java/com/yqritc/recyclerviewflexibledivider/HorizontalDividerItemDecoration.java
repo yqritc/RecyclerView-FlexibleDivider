@@ -33,26 +33,14 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
 
         int dividerSize = getDividerSize(position, parent);
         boolean isReverseLayout = isReverseLayout(parent);
-        if (mDividerType == DividerType.DRAWABLE) {
-            // set top and bottom position of divider
-            if (isReverseLayout) {
-                bounds.bottom = child.getTop() - params.topMargin + transitionY;
-                bounds.top = bounds.bottom - dividerSize;
-            } else {
-                bounds.top = child.getBottom() + params.bottomMargin + transitionY;
-                bounds.bottom = bounds.top + dividerSize;
-            }
+        // set top and bottom position of divider
+        if (isReverseLayout) {
+            bounds.bottom = child.getTop() - params.topMargin + transitionY;
+            bounds.top = bounds.bottom - dividerSize;
         } else {
-            // set center point of divider
-            int halfSize = dividerSize / 2;
-            if (isReverseLayout) {
-                bounds.top = child.getTop() - params.topMargin - halfSize + transitionY;
-            } else {
-                bounds.top = child.getBottom() + params.bottomMargin + halfSize + transitionY;
-            }
-            bounds.bottom = bounds.top;
+            bounds.top = child.getBottom() + params.bottomMargin + transitionY;
+            bounds.bottom = bounds.top + dividerSize;
         }
-
         if (mPositionInsideItem) {
             if (isReverseLayout) {
                 bounds.top += dividerSize;
@@ -62,8 +50,31 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
                 bounds.bottom -= dividerSize;
             }
         }
-
         return bounds;
+    }
+
+    @Override
+    protected Rect getDividerPaintBound(int dividerPaintSize, @Gravity int gravity, Rect dividerBounds, RecyclerView parent) {
+        boolean isReverseLayout = isReverseLayout(parent);
+        if (gravity == CENTER) {
+            dividerBounds.top += (dividerBounds.height() - dividerPaintSize) / 2;
+            dividerBounds.bottom = dividerBounds.top + dividerPaintSize;
+        } else {
+            if (isReverseLayout) {
+                if (gravity == BOTTOM) {
+                    dividerBounds.bottom = dividerBounds.top + dividerPaintSize;
+                } else {
+                    dividerBounds.top = dividerBounds.bottom - dividerPaintSize;
+                }
+            } else {
+                if (gravity == BOTTOM) {
+                    dividerBounds.top = dividerBounds.bottom - dividerPaintSize;
+                } else {
+                    dividerBounds.bottom = dividerBounds.top + dividerPaintSize;
+                }
+            }
+        }
+        return dividerBounds;
     }
 
     @Override
@@ -81,10 +92,10 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
     }
 
     private int getDividerSize(int position, RecyclerView parent) {
-        if (mPaintProvider != null) {
-            return (int) mPaintProvider.dividerPaint(position, parent).getStrokeWidth();
-        } else if (mSizeProvider != null) {
+        if (mSizeProvider != null) {
             return mSizeProvider.dividerSize(position, parent);
+        } else if (mPaintProvider != null) {
+            return (int) mPaintProvider.dividerPaint(position, parent).getStrokeWidth();
         } else if (mDrawableProvider != null) {
             Drawable drawable = mDrawableProvider.drawableProvider(position, parent);
             return drawable.getIntrinsicHeight();
