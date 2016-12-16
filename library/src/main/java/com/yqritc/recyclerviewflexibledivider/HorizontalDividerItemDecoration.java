@@ -14,7 +14,6 @@ import android.view.View;
 public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
 
     private MarginProvider mMarginProvider;
-    private PaintSizeProvider mPaintSizeProvider;
 
     protected HorizontalDividerItemDecoration(Builder builder) {
         super(builder);
@@ -55,12 +54,25 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
     }
 
     @Override
-    protected Rect getDividerPaintBound(int dividerPaintSize, Rect dividerBounds, RecyclerView parent) {
+    protected Rect getDividerPaintBound(int dividerPaintSize, @Gravity int gravity, Rect dividerBounds, RecyclerView parent) {
         boolean isReverseLayout = isReverseLayout(parent);
-        if (isReverseLayout) {
-            dividerBounds.top = dividerBounds.bottom - dividerPaintSize;
-        } else {
+        if (gravity == CENTER) {
+            dividerBounds.top += (dividerBounds.height() - dividerPaintSize) / 2;
             dividerBounds.bottom = dividerBounds.top + dividerPaintSize;
+        } else {
+            if (isReverseLayout) {
+                if (gravity == BOTTOM) {
+                    dividerBounds.bottom = dividerBounds.top + dividerPaintSize;
+                } else {
+                    dividerBounds.top = dividerBounds.bottom - dividerPaintSize;
+                }
+            } else {
+                if (gravity == BOTTOM) {
+                    dividerBounds.top = dividerBounds.bottom - dividerPaintSize;
+                } else {
+                    dividerBounds.bottom = dividerBounds.top + dividerPaintSize;
+                }
+            }
         }
         return dividerBounds;
     }

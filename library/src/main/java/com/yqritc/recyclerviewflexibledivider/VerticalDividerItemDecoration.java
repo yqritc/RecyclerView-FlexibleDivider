@@ -57,12 +57,25 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
     }
 
     @Override
-    protected Rect getDividerPaintBound(int dividerPaintSize, Rect dividerBounds, RecyclerView parent) {
+    protected Rect getDividerPaintBound(int dividerPaintSize, @Gravity int gravity, Rect dividerBounds, RecyclerView parent) {
         boolean isReverseLayout = isReverseLayout(parent);
-        if (isReverseLayout) {
-            dividerBounds.left = dividerBounds.right - dividerPaintSize;
-        } else {
+        if (gravity == CENTER) {
+            dividerBounds.left += (dividerBounds.width() - dividerPaintSize) / 2;
             dividerBounds.right = dividerBounds.left + dividerPaintSize;
+        } else {
+            if (isReverseLayout) {
+                if (gravity == LEFT) {
+                    dividerBounds.left = dividerBounds.right - dividerPaintSize;
+                } else {
+                    dividerBounds.right = dividerBounds.left + dividerPaintSize;
+                }
+            } else {
+                if (gravity == LEFT) {
+                    dividerBounds.right = dividerBounds.left + dividerPaintSize;
+                } else {
+                    dividerBounds.left = dividerBounds.right - dividerPaintSize;
+                }
+            }
         }
         return dividerBounds;
     }

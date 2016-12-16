@@ -10,16 +10,31 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.IntDef;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Created by yqritc on 2015/01/08.
  */
 public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecoration {
+
+    public static final int LEFT = 0;
+    public static final int TOP = 1;
+    public static final int RIGHT = 2;
+    public static final int BOTTOM = 3;
+    public static final int CENTER = 4;
+
+    @IntDef({LEFT, TOP, RIGHT, BOTTOM, CENTER})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Gravity {
+    }
 
     private static final int DEFAULT_SIZE = 2;
     private static final int[] ATTRS = new int[]{
@@ -34,6 +49,8 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     protected boolean mShowLastDivider;
     protected boolean mPositionInsideItem;
     private Paint mPaint;
+    private GravityProvider mGravityProvider;
+    private PaintSizeProvider mPaintSizeProvider;
 
     protected FlexibleDividerDecoration(Builder builder) {
         if (builder.mPaintProvider != null) {
@@ -62,6 +79,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             setPaintSizeProvider(builder);
         }
         setSizeProvider(builder);
+        setGravityProvider(builder);
         mVisibilityProvider = builder.mVisibilityProvider;
         mShowLastDivider = builder.mShowLastDivider;
         mPositionInsideItem = builder.mPositionInsideItem;
@@ -80,6 +98,18 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
                         return drawable.getIntrinsicHeight();
                     }
                     return -1;
+                }
+            };
+        }
+    }
+
+    private void setGravityProvider(Builder builder) {
+        mGravityProvider = builder.mGravityProvider;
+        if (mGravityProvider == null) {
+            mGravityProvider = new GravityProvider() {
+                @Override
+                public int getGravity(int position, int viewType, RecyclerView parent) {
+                    return CENTER;
                 }
             };
         }
@@ -151,7 +181,8 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             if (mPaintSizeProvider != null) {
                 int paintSize = mPaintSizeProvider.getPaintSize(groupIndex, viewType, parent);
                 if (paintSize >= 0) {
-                    bounds = getDividerPaintBound(paintSize, bounds, parent);
+                    int gravity = mGravityProvider.getGravity(groupIndex, viewType, parent);
+                    bounds = getDividerPaintBound(paintSize, gravity, bounds, parent);
                 }
             }
             switch (mDividerType) {
@@ -173,7 +204,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         }
     }
 
-    abstract protected Rect getDividerPaintBound(int dividerPaintSize, Rect dividerBounds, RecyclerView parent);
+    abstract protected Rect getDividerPaintBound(int dividerPaintSize, @Gravity int gravity, Rect dividerBounds, RecyclerView parent);
 
     @Override
     public void getItemOffsets(Rect rect, View v, RecyclerView parent, RecyclerView.State state) {
@@ -275,8 +306,6 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         return position;
     }
 
-    private PaintSizeProvider mPaintSizeProvider;
-
     protected abstract Rect getDividerBound(int position, RecyclerView parent, View child);
 
     protected abstract void setItemOffsets(Rect outRect, int position, RecyclerView parent);
@@ -299,6 +328,23 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
          * @return True if the divider at position should be hidden
          */
         int getPaintSize(int position, int viewType, RecyclerView parent);
+    }
+
+    /**
+     * Interface for controlling divider gravity
+     */
+    public interface GravityProvider {
+
+        /**
+         * Returns {@link Gravity} value of divider
+         *
+         * @param position Divider position (or group index for GridLayoutManager)
+         * @param viewType Item view type
+         * @param parent   RecyclerView
+         * @return Gravity
+         */
+        @Gravity
+        int getGravity(int position, int viewType, RecyclerView parent);
     }
 
     /**
@@ -387,6 +433,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         private DrawableProvider mDrawableProvider;
         private SizeProvider mSizeProvider;
         private PaintSizeProvider mPaintSizeProvider;
+        private GravityProvider mGravityProvider;
         private VisibilityProvider mVisibilityProvider = new VisibilityProvider() {
             @Override
             public boolean shouldHideDivider(int position, int viewType, RecyclerView parent) {
@@ -476,6 +523,11 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
         public T paintSizeProvider(PaintSizeProvider paintSizeProvider) {
             mPaintSizeProvider = paintSizeProvider;
+            return (T) this;
+        }
+
+        public T gravityProvider(GravityProvider gravityProvider) {
+            mGravityProvider = gravityProvider;
             return (T) this;
         }
 
