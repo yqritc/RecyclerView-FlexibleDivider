@@ -33,24 +33,14 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
 
         int dividerSize = getDividerSize(position, parent);
         boolean isReverseLayout = isReverseLayout(parent);
-        if (mDividerType == DividerType.DRAWABLE) {
-            // set left and right position of divider
-            if (isReverseLayout) {
-                bounds.right = child.getLeft() - params.leftMargin + transitionX;
-                bounds.left = bounds.right - dividerSize;
-            } else {
-                bounds.left = child.getRight() + params.rightMargin + transitionX;
-                bounds.right = bounds.left + dividerSize;
-            }
+
+        // set left and right position of divider
+        if (isReverseLayout) {
+            bounds.right = child.getLeft() - params.leftMargin + transitionX;
+            bounds.left = bounds.right - dividerSize;
         } else {
-            // set center point of divider
-            int halfSize = dividerSize / 2;
-            if (isReverseLayout) {
-                bounds.left = child.getLeft() - params.leftMargin - halfSize + transitionX;
-            } else {
-                bounds.left = child.getRight() + params.rightMargin + halfSize + transitionX;
-            }
-            bounds.right = bounds.left;
+            bounds.left = child.getRight() + params.rightMargin + transitionX;
+            bounds.right = bounds.left + dividerSize;
         }
 
         if (mPositionInsideItem) {
@@ -64,6 +54,17 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
         }
 
         return bounds;
+    }
+
+    @Override
+    protected Rect getDividerPaintBound(int dividerPaintSize, Rect dividerBounds, RecyclerView parent) {
+        boolean isReverseLayout = isReverseLayout(parent);
+        if (isReverseLayout) {
+            dividerBounds.left = dividerBounds.right - dividerPaintSize;
+        } else {
+            dividerBounds.right = dividerBounds.left + dividerPaintSize;
+        }
+        return dividerBounds;
     }
 
     @Override

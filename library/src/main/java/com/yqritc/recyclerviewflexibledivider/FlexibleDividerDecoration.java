@@ -43,7 +43,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             mDividerType = DividerType.COLOR;
             mColorProvider = builder.mColorProvider;
             mPaint = new Paint();
-            setSizeProvider(builder);
+            setPaintSizeProvider(builder);
         } else {
             mDividerType = DividerType.DRAWABLE;
             if (builder.mDrawableProvider == null) {
@@ -59,12 +59,30 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             } else {
                 mDrawableProvider = builder.mDrawableProvider;
             }
-            mSizeProvider = builder.mSizeProvider;
+            setPaintSizeProvider(builder);
         }
-
+        setSizeProvider(builder);
         mVisibilityProvider = builder.mVisibilityProvider;
         mShowLastDivider = builder.mShowLastDivider;
         mPositionInsideItem = builder.mPositionInsideItem;
+    }
+
+    private void setPaintSizeProvider(Builder builder) {
+        mPaintSizeProvider = builder.mPaintSizeProvider;
+        if (mPaintSizeProvider == null) {
+            mPaintSizeProvider = new PaintSizeProvider() {
+                @Override
+                public int getPaintSize(int position, int viewType, RecyclerView parent) {
+                    if (mPaintProvider != null) {
+                        return (int) mPaintProvider.dividerPaint(position, parent).getStrokeWidth();
+                    } else if (mDrawableProvider != null) {
+                        Drawable drawable = mDrawableProvider.drawableProvider(position, parent);
+                        return drawable.getIntrinsicHeight();
+                    }
+                    return -1;
+                }
+            };
+        }
     }
 
     private void setSizeProvider(Builder builder) {
@@ -130,6 +148,12 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             }
 
             Rect bounds = getDividerBound(groupIndex, parent, child);
+            if (mPaintSizeProvider != null) {
+                int paintSize = mPaintSizeProvider.getPaintSize(groupIndex, viewType, parent);
+                if (paintSize >= 0) {
+                    bounds = getDividerPaintBound(paintSize, bounds, parent);
+                }
+            }
             switch (mDividerType) {
                 case DRAWABLE:
                     Drawable drawable = mDrawableProvider.drawableProvider(groupIndex, parent);
@@ -138,16 +162,18 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
                     break;
                 case PAINT:
                     mPaint = mPaintProvider.dividerPaint(groupIndex, parent);
-                    c.drawLine(bounds.left, bounds.top, bounds.right, bounds.bottom, mPaint);
+                    c.drawLine(bounds.left, bounds.top, bounds.right, bounds.top, mPaint);
                     break;
                 case COLOR:
                     mPaint.setColor(mColorProvider.dividerColor(groupIndex, parent));
-                    mPaint.setStrokeWidth(mSizeProvider.dividerSize(groupIndex, parent));
-                    c.drawLine(bounds.left, bounds.top, bounds.right, bounds.bottom, mPaint);
+                    mPaint.setStrokeWidth(bounds.height());
+                    c.drawLine(bounds.left, bounds.top, bounds.right, bounds.top, mPaint);
                     break;
             }
         }
     }
+
+    abstract protected Rect getDividerPaintBound(int dividerPaintSize, Rect dividerBounds, RecyclerView parent);
 
     @Override
     public void getItemOffsets(Rect rect, View v, RecyclerView parent, RecyclerView.State state) {
@@ -249,12 +275,30 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         return position;
     }
 
+    private PaintSizeProvider mPaintSizeProvider;
+
     protected abstract Rect getDividerBound(int position, RecyclerView parent, View child);
 
     protected abstract void setItemOffsets(Rect outRect, int position, RecyclerView parent);
 
     protected enum DividerType {
         DRAWABLE, PAINT, COLOR
+    }
+
+    /**
+     * Interface for controlling divider paint size
+     */
+    public interface PaintSizeProvider {
+
+        /**
+         * Returns true if divider should be hidden.
+         *
+         * @param position Divider position (or group index for GridLayoutManager)
+         * @param viewType Item view type
+         * @param parent   RecyclerView
+         * @return True if the divider at position should be hidden
+         */
+        int getPaintSize(int position, int viewType, RecyclerView parent);
     }
 
     /**
@@ -342,6 +386,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         private ColorProvider mColorProvider;
         private DrawableProvider mDrawableProvider;
         private SizeProvider mSizeProvider;
+        private PaintSizeProvider mPaintSizeProvider;
         private VisibilityProvider mVisibilityProvider = new VisibilityProvider() {
             @Override
             public boolean shouldHideDivider(int position, int viewType, RecyclerView parent) {
@@ -429,6 +474,11 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             return (T) this;
         }
 
+        public T paintSizeProvider(PaintSizeProvider paintSizeProvider) {
+            mPaintSizeProvider = paintSizeProvider;
+            return (T) this;
+        }
+
         public T showLastDivider() {
             mShowLastDivider = true;
             return (T) this;
@@ -445,9 +495,9 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
                     throw new IllegalArgumentException(
                             "Use setColor method of Paint class to specify line color. Do not provider ColorProvider if you set PaintProvider.");
                 }
-                if (mSizeProvider != null) {
+                if (mPaintSizeProvider != null) {
                     throw new IllegalArgumentException(
-                            "Use setStrokeWidth method of Paint class to specify line size. Do not provider SizeProvider if you set PaintProvider.");
+                            "Use setStrokeWidth method of Paint class to specify line size. Do not provider PaintSizeProvider if you set PaintProvider.");
                 }
             }
         }
