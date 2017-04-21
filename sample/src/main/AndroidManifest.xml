@@ -29,6 +29,9 @@
         <activity
             android:name=".SimpleGridActivity"
             android:label="@string/menu_simple_grid"/>
+        <activity
+            android:name=".SimpleStaggeredGridActivity"
+            android:label="@string/menu_simple_staggered_grid"/>
     </application>
 
 </manifest>

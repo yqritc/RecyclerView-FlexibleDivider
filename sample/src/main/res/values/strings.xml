@@ -7,4 +7,5 @@
     <string name="menu_drawable">Drawable Divider List</string>
     <string name="menu_complex">Complex Divider List</string>
     <string name="menu_simple_grid">Simple Divider Grid</string>
+    <string name="menu_simple_staggered_grid">Simple Divider StaggeredGrid</string>
 </resources>

@@ -63,6 +63,9 @@ public class DrawableActivity extends AppCompatActivity {
             case R.id.action_simple_grid:
                 SimpleGridActivity.startActivity(this);
                 return true;
+            case R.id.action_simple_staggered_grid:
+                SimpleStaggeredGridActivity.startActivity(this);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
