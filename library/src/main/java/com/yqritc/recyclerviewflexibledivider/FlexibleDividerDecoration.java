@@ -99,6 +99,10 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             View child = parent.getChildAt(i);
             int childPosition = parent.getChildAdapterPosition(child);
 
+            if (childPosition == RecyclerView.NO_POSITION) {
+                continue;
+            }
+
             if (childPosition < lastChildPosition) {
                 // Avoid remaining divider when animation starts
                 continue;
