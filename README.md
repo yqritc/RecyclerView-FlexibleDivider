@@ -16,6 +16,7 @@ Android library providing simple way to control divider items of RecyclerView
 ```groovy
 repositories {
     jcenter()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
