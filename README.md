@@ -11,8 +11,8 @@ Android library providing simple way to control divider items of RecyclerView
 
 [Release Note] (https://github.com/yqritc/RecyclerView-FlexibleDivider/releases)
 
-AndroidX
-# Gradle
+
+# Gradle (AndroidX)
 ```groovy
 repositories {
     jcenter()
@@ -22,8 +22,8 @@ dependencies {
     implementation 'com.github.mazenrashed:RecyclerView-FlexibleDivider:1.5.0'
 }
 ```
-Support lib
-# Gradle
+
+# Gradle (Support lib)
 ```groovy
 repositories {
     jcenter()
