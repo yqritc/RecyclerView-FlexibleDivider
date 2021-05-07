@@ -14,7 +14,9 @@ Android library providing simple way to control divider items of RecyclerView
 # Gradle
 ```groovy
 repositories {
-    jcenter()
+   // jcenter()
+   // jcenter nolonger available canyou port it to maven
+     mavenCentral()
 }
 
 dependencies {
