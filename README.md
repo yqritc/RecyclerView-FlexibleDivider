@@ -9,7 +9,7 @@ Android library providing simple way to control divider items of RecyclerView
 
 # Release Note
 
-[Release Note] (https://github.com/yqritc/RecyclerView-FlexibleDivider/releases)
+[Release Note](https://github.com/yqritc/RecyclerView-FlexibleDivider/releases)
 
 # Gradle
 ```groovy
@@ -96,8 +96,10 @@ Enables you to specify left and right margin of divider.
 - MarginProvider for vertical divider (horizontal list)  
 Enables you to specify top and bottom margin of divider.  
 
-**For GridLayoutManager**, the position parameter of above providers is group index of items.
-So, control your divider based on [group index](http://developer.android.com/intl/ja/reference/android/support/v7/widget/GridLayoutManager.SpanSizeLookup.html#getSpanGroupIndex(int, int)) instead of the position of items.
+**For GridLayoutManager**, the position parameter of above providers is 
+
+index of items.
+So, control your divider based on [group undex](https://developer.android.com/reference/android/support/v7/widget/GridLayoutManager.SpanSizeLookup.html?hl=ja#getSpanGroupIndex(int)) instead of the position of items.
 
 ### Optional
 - Builder.showLastDivider  
