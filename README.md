@@ -14,11 +14,11 @@ Android library providing simple way to control divider items of RecyclerView
 # Gradle
 ```groovy
 repositories {
-    jcenter()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    compile 'com.yqritc:recyclerview-flexibledivider:1.4.0'
+    implementation 'com.github.ethaannn：RecyclerView-FlexibleDivider：1.4.1'
 }
 ```
 
