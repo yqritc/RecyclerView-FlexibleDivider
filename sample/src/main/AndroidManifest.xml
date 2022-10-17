@@ -9,6 +9,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
+            android:exported="true"
             android:name=".SimpleActivity"
             android:label="@string/menu_simple">
             <intent-filter>
