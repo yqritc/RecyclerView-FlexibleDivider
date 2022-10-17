@@ -1,4 +1,4 @@
-package com.yqritc.recyclerviewflexibledivider;
+package com.ethan.flexibleddivider;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -7,14 +7,16 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.view.View;
+
 import androidx.annotation.ColorRes;
 import androidx.annotation.DimenRes;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
 
 /**
  * Created by yqritc on 2015/01/08.
@@ -27,10 +29,13 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     };
 
     protected enum DividerType {
+        /**
+         * 图片
+         */
         DRAWABLE, PAINT, COLOR
     }
 
-    protected DividerType mDividerType = DividerType.DRAWABLE;
+    protected DividerType mDividerType;
     protected VisibilityProvider mVisibilityProvider;
     protected PaintProvider mPaintProvider;
     protected ColorProvider mColorProvider;
@@ -55,12 +60,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
                 TypedArray a = builder.mContext.obtainStyledAttributes(ATTRS);
                 final Drawable divider = a.getDrawable(0);
                 a.recycle();
-                mDrawableProvider = new DrawableProvider() {
-                    @Override
-                    public Drawable drawableProvider(int position, RecyclerView parent) {
-                        return divider;
-                    }
-                };
+                mDrawableProvider = (position, parent) -> divider;
             } else {
                 mDrawableProvider = builder.mDrawableProvider;
             }
@@ -85,7 +85,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     }
 
     @Override
-    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+    public void onDraw(@NonNull Canvas c, RecyclerView parent, @NonNull RecyclerView.State state) {
         RecyclerView.Adapter adapter = parent.getAdapter();
         if (adapter == null) {
             return;
@@ -100,7 +100,6 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
             int childPosition = parent.getChildAdapterPosition(child);
 
             if (childPosition < lastChildPosition) {
-                // Avoid remaining divider when animation starts
                 continue;
             }
             lastChildPosition = childPosition;
@@ -136,12 +135,13 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
                     mPaint.setStrokeWidth(mSizeProvider.dividerSize(groupIndex, parent));
                     c.drawLine(bounds.left, bounds.top, bounds.right, bounds.bottom, mPaint);
                     break;
+                default:break;
             }
         }
     }
 
     @Override
-    public void getItemOffsets(Rect rect, View v, RecyclerView parent, RecyclerView.State state) {
+    public void getItemOffsets(@NonNull Rect rect, @NonNull View v, RecyclerView parent, @NonNull RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(v);
         int itemCount = parent.getAdapter().getItemCount();
         int lastDividerOffset = getLastDividerOffset(parent);

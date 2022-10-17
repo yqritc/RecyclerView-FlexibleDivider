@@ -1,6 +1,6 @@
 package com.yqritc.recyclerviewflexibledivider.sample;
 
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
+import com.ethan.flexibleddivider.HorizontalDividerItemDecoration;
 
 import android.app.Activity;
 import android.content.Intent;
